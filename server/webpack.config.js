@@ -8,7 +8,7 @@ module.exports = {
   },
   mode: process.env.NODE_ENV || 'development',
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'build'),
     publicPath: '/',
     filename: '[name].js'
   },
@@ -20,6 +20,17 @@ module.exports = {
   externals: [nodeExternals()],
   module: {
     rules: [
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: true,
+          failOnError: false,
+          failOnWarning: false
+        }
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
