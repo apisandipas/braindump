@@ -1,6 +1,6 @@
-import db, { ModelBase } from 'database'
-import Note from './note'
-import Joi from '@hapi/joi'
+import db, { ModelBase } from 'database';
+import Note from './note';
+import Joi from '@hapi/joi';
 
 const User = ModelBase.extend({
   tableName: 'users',
@@ -8,7 +8,7 @@ const User = ModelBase.extend({
   hidden: ['password_digest', 'password_reset_token', 'password_reset_expires'],
   hasTimestamps: ['created_at', 'updated_at'],
   notes() {
-    return this.hasMany(Note)
+    return this.hasMany(Note);
   },
   validate: {
     name: Joi.string().required(),
@@ -16,6 +16,6 @@ const User = ModelBase.extend({
       .email()
       .required()
   }
-})
+});
 
-export default db.model('User', User)
+export default db.model('User', User);

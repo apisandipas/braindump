@@ -1,12 +1,12 @@
-import db, { ModelBase } from 'database'
-import User from './user'
-import Joi from '@hapi/joi'
+import db, { ModelBase } from 'database';
+import User from './user';
+import Joi from '@hapi/joi';
 
 const Note = ModelBase.extend({
   tableName: 'notes',
   hasTimestamps: ['created_at', 'updated_at'],
   user() {
-    return this.belongsTo(User)
+    return this.belongsTo(User);
   },
   validate: {
     title: Joi.string()
@@ -18,6 +18,6 @@ const Note = ModelBase.extend({
       .alphanum()
       .required()
   }
-})
+});
 
-export default db.model('Note', Note)
+export default db.model('Note', Note);

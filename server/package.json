@@ -10,12 +10,16 @@
     "@babel/preset-env": "^7.5.5",
     "babel-eslint": "^10.0.2",
     "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "faker": "^4.1.0",
     "husky": "^3.0.3",
+    "lint-staged": "^9.2.1",
     "lodash.map": "^4.6.0",
     "lodash.random": "^3.2.0",
     "lodash.range": "^3.2.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -30,7 +34,6 @@
     "graphql": "^14.4.2",
     "joi": "^14.3.1",
     "knex": "^0.19.1",
-    "lint-staged": "^9.2.1",
     "merge-graphql-schemas": "^1.6.2-bdaf070.0",
     "mysql": "^2.17.1"
   },
@@ -48,7 +51,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "./node_modules/.bin/eslint --fix",
+      "./node_modules/.bin/eslint --fix src/",
       "git add"
     ]
   }
