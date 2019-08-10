@@ -2473,7 +2473,7 @@ graphql-toolkit@0.4.1:
     tslib "^1.9.3"
     valid-url "1.0.9"
 
-graphql-tools@^4.0.0, graphql-tools@^4.0.5:
+graphql-tools@^4.0.0:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-4.0.5.tgz#d2b41ee0a330bfef833e5cdae7e1f0b0d86b1754"
   integrity sha512-kQCh3IZsMqquDx7zfIGWBau42xe46gmqabwYkpPlCLIjcEY1XK+auP7iGRD9/205BPyoQdY8hT96MPpgERdC9Q==
