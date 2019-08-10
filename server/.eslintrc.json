@@ -18,6 +18,7 @@
       "error",
       {
         "singleQuote": true,
+        "semis": false,
         "parser": "flow"
       }
     ]
