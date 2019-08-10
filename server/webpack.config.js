@@ -17,7 +17,18 @@ module.exports = {
     __dirname: false,
     __filename: false
   },
-  externals: [nodeExternals()],
+  externals: [
+    {
+      fs: 'commonjs fs'
+    },
+    nodeExternals()
+  ],
+  resolve: {
+    modules: [
+      path.resolve(__dirname + '/src'),
+      path.resolve(__dirname + '/node_modules')
+    ]
+  },
   module: {
     rules: [
       {

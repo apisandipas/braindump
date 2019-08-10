@@ -1,14 +1,18 @@
-import path from 'path'
-import express from 'express'
-const app = express()
+import '@babel/polyfill'
+import { ApolloServer } from 'apollo-server'
+import dotenv from 'dotenv'
+import typeDefs from 'schema'
+import resolvers from 'resolvers'
 
-app.get('*', (req, res) => {
-  res.send('ok!')
+dotenv.config()
+
+const port = process.env.PORT || 8080 // eslint-disable-line no-undef
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers
 })
 
-const PORT = process.env.PORT || 8080
-
-app.listen(PORT, () => {
-  console.log(`App listening to ${PORT}....`)
-  console.log('Press Ctrl+C to quit.')
+server.listen({ port }).then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`) // eslint-disable-line no-undef
 })
