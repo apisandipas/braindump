@@ -1,5 +1,6 @@
 import db, { ModelBase } from 'database'
 import Note from './note'
+import Joi from '@hapi/joi'
 
 const User = ModelBase.extend({
   tableName: 'users',
@@ -8,6 +9,12 @@ const User = ModelBase.extend({
   hasTimestamps: ['created_at', 'updated_at'],
   notes() {
     return this.hasMany(Note)
+  },
+  validate: {
+    name: Joi.string().required(),
+    email: Joi.string()
+      .email()
+      .required()
   }
 })
 
