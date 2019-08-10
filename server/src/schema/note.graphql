@@ -1,0 +1,15 @@
+type Note {
+  id: ID!
+  title: String!
+  body: String!
+  user: User!
+}
+
+type Query {
+  allNotes: [Note]!
+  getNote(id: ID!): Note!
+}
+
+type Mutation {
+  createNote(title: String!, body: String!): Note
+}

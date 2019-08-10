@@ -6,18 +6,10 @@ export default {
   Query: {
     getUser: async (parent, { id }) => {
       try {
-        const notes = await User.where('id', id).fetch({
+        const user = await User.where('id', id).fetch({
           withRelated: ['notes']
         })
-        return notes.toJSON()
-      } catch (err) {
-        return new Error(err.message)
-      }
-    },
-    allNotes: async () => {
-      try {
-        const notes = await Note.fetchAll()
-        return notes.toJSON()
+        return user.toJSON()
       } catch (err) {
         return new Error(err.message)
       }

@@ -1,12 +1,18 @@
+/* global __dirname, process, console */
 import '@babel/polyfill'
+import path from 'path'
 import { ApolloServer } from 'apollo-server'
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 import dotenv from 'dotenv'
-import typeDefs from 'schema'
-import resolvers from 'resolvers'
 
 dotenv.config()
 
-const port = process.env.PORT || 8080 // eslint-disable-line no-undef
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')))
+const resolvers = mergeResolvers(
+  fileLoader(path.join(__dirname, './resolvers'))
+)
+
+const port = process.env.PORT || 8080
 
 const server = new ApolloServer({
   typeDefs,
@@ -14,5 +20,5 @@ const server = new ApolloServer({
 })
 
 server.listen({ port }).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`) // eslint-disable-line no-undef
+  console.log(`🚀  Server ready at ${url}`)
 })
