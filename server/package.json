@@ -11,11 +11,11 @@
     "babel-eslint": "^10.0.2",
     "eslint": "^6.1.0",
     "faker": "^4.1.0",
+    "husky": "^3.0.3",
     "lodash.map": "^4.6.0",
     "lodash.random": "^3.2.0",
     "lodash.range": "^3.2.0",
-    "nodemon": "^1.19.1",
-    "npm-run-all": "^4.1.5"
+    "nodemon": "^1.19.1"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -30,14 +30,26 @@
     "graphql": "^14.4.2",
     "joi": "^14.3.1",
     "knex": "^0.19.1",
+    "lint-staged": "^9.2.1",
     "merge-graphql-schemas": "^1.6.2-bdaf070.0",
     "mysql": "^2.17.1"
   },
   "scripts": {
-    "db:migrate": "knex migrate:latest",
-    "db:seed": "knex seed:run",
-    "serve": "NODE_PATH=build/ node build/index.js",
+    "start": "DEBUG=knex:query NODE_PATH=src/ nodemon --exec babel-node src/index.js",
     "build": "babel src -d build",
-    "start": "NODE_PATH=src/ nodemon --exec babel-node src/index.js"
+    "serve": "NODE_PATH=build/ node build/index.js",
+    "db:migrate": "knex migrate:latest",
+    "db:seed": "knex seed:run"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "./node_modules/.bin/eslint --fix",
+      "git add"
+    ]
   }
 }
