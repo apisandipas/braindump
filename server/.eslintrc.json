@@ -18,8 +18,8 @@
       "error",
       {
         "singleQuote": true,
-        "semis": false,
-        "parser": "flow"
+        "semi": false,
+        "printWidth": 100
       }
     ]
   }
