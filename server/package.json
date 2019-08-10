@@ -4,21 +4,18 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
     "eslint": "^6.1.0",
-    "eslint-loader": "^2.2.1",
     "faker": "^4.1.0",
     "lodash.map": "^4.6.0",
     "lodash.random": "^3.2.0",
     "lodash.range": "^3.2.0",
     "nodemon": "^1.19.1",
-    "npm-run-all": "^4.1.5",
-    "webpack": "^4.38.0",
-    "webpack-cli": "^3.3.6",
-    "webpack-node-externals": "^1.7.2"
+    "npm-run-all": "^4.1.5"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -27,6 +24,7 @@
     "bookshelf": "^0.15.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "global": "^4.4.0",
     "graphql": "^14.4.2",
     "graphql-tools": "^4.0.5",
     "knex": "^0.19.1",
@@ -34,11 +32,10 @@
     "mysql": "^2.17.1"
   },
   "scripts": {
-    "dev": "npm-run-all --parallel dev:*",
-    "dev:1server": "nodemon --watch build --exec \"node build/server.js\"",
-    "dev:2build": "webpack --watch",
-    "build": "NODE_ENV=production webpack --mode=production",
     "db:migrate": "knex migrate:latest",
-    "db:seed": "knex seed:run"
+    "db:seed": "knex seed:run",
+    "serve": "NODE_PATH=build/ node build/index.js",
+    "build": "babel src -d build",
+    "start": "NODE_PATH=src/ nodemon --exec babel-node src/index.js"
   }
 }
