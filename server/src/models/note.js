@@ -1,7 +1,7 @@
-import db from 'database'
+import db, { ModelBase } from 'database'
 import User from './user'
 
-const Note = db.Model.extend({
+const Note = ModelBase.extend({
   tableName: 'notes',
   hasTimestamps: ['created_at', 'updated_at'],
   user() {

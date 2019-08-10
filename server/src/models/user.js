@@ -1,7 +1,7 @@
-import db from 'database'
+import db, { ModelBase } from 'database'
 import Note from './note'
 
-const User = db.Model.extend({
+const User = ModelBase.extend({
   tableName: 'users',
   hasSecurePassword: true,
   hidden: ['password_digest', 'password_reset_token', 'password_reset_expires'],
