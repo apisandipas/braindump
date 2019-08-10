@@ -1,8 +1,8 @@
-/*global require module process*/
+/*global require module process */
 // Update with your config settings.
 require('dotenv').config()
 
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = process.env // eslint-disable-line no-undef
+const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = process.env
 
 module.exports = {
   development: {
