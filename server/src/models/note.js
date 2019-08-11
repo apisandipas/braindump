@@ -10,13 +10,10 @@ const Note = ModelBase.extend({
   },
   validate: {
     title: Joi.string()
-      .alphanum()
       .min(3)
       .max(30)
       .required(),
-    body: Joi.string()
-      .alphanum()
-      .required()
+    body: Joi.string().required()
   }
 })
 

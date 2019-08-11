@@ -27,9 +27,9 @@ export default {
         return new Error(err.message)
       }
     },
-    updateNote: async (parent, args, { models }) => {
+    updateNote: async (parent, { id, values }, { models }) => {
       try {
-        const note = models.Note.update(args)
+        const note = await models.Note.update(values, { id })
         return note.toJSON()
       } catch (err) {
         return new Error(err.message)

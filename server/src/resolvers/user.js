@@ -28,9 +28,9 @@ export default {
         return new Error(err.message)
       }
     },
-    updateUser: async (parent, args, { models }) => {
+    updateUser: async (parent, { id, ...args }, { models }) => {
       try {
-        const user = await models.User.update(args)
+        const user = await models.User.update(args, { id })
         return user.toJSON()
       } catch (err) {
         return new Error(err.message)
