@@ -11,9 +11,9 @@
   - ~~Switch to apollo-server-express~~
   - ~~add models to context object~~
   - Add Users
-    - Graphql Type, Queries and Mutations
-    - Model, Seed, Migration, Relations and Validations
-    - CRUD Resolvers
+    - ~~Graphql Type, Queries and Mutations~~
+    - ~~Model, Seed, Migration, Relations and Validations~~
+    - ~~CRUD Resolvers~~
     - Add registration flow for Users w/ proper password hashing
       - Resolve user via JWT in header
   - Add Notes

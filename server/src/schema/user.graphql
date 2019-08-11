@@ -9,3 +9,9 @@ type Query {
   allUsers: [User]!
   getUser(id: ID!): User
 }
+
+type Mutation {
+  register(username: String!, email: String!, password: String!): User!
+  updateUser(id: ID!): User!
+  deleteUser(id: ID!): Boolean!
+}
