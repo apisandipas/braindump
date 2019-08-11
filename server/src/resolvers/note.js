@@ -1,11 +1,9 @@
-import Note from 'models/note'
-
 export default {
   Note: {},
   Query: {
-    allNotes: async () => {
+    allNotes: async (parent, args, { models }) => {
       try {
-        const notes = await Note.fetchAll()
+        const notes = await models.Note.fetchAll()
         return notes.toJSON()
       } catch (err) {
         return new Error(err.message)

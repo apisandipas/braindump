@@ -7,8 +7,8 @@
   - ~~Refactor project structure into modules using merge-graphql-schemas~~
   - ~~Refactor Models to use bookshelf-model-base~~
   - ~~Add Joi validation to models~~
-  - Switch to apollo-server-express
-  - add models to context object
+  - ~~Switch to apollo-server-express~~
+  - ~~add models to context object~~
   - Add registration flow for Users w/ proper password hashing
     - Resolve user via JWT in header
   - Add Notebooks

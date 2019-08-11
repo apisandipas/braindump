@@ -5,6 +5,7 @@ import { ApolloServer } from 'apollo-server-express'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
+import models from 'models'
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ app.use(cors('*'))
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: { models },
   playground: process.env.NODE_ENV === 'development'
 })
 
