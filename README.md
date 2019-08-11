@@ -29,7 +29,7 @@
     - Model, Seed, Migration, Relations and Validations
     - CRUD Resolvers
   - Better error handling
-    - Better client-consumable errors
+    - ~~Better client-consumable errors~~
       - ~~Joi validation errors~~
       - ~~App level errors~~
     - Rollbar or similar service
