@@ -14,8 +14,8 @@
     - ~~Graphql Type, Queries and Mutations~~
     - ~~Model, Seed, Migration, Relations and Validations~~
     - ~~CRUD Resolvers~~
-    - Add registration flow for Users w/ proper password hashing
-      - Resolve user via JWT in header
+    - ~~Add registration flow for Users w/ proper password hashing~~
+    - Resolve user via JWT in header
   - Add Notes
     - ~~Graphql Type, Queries and Mutations~~
     - ~~Model, Seed, Migration, Relations and Validations~~
@@ -30,8 +30,8 @@
     - CRUD Resolvers
   - Better error handling
     - Better client-consumable errors
-      - Joi validation errors
-      - App level errors
+      - ~~Joi validation errors~~
+      - ~~App level errors~~
     - Rollbar or similar service
 
 ## Client
