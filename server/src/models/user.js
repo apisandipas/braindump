@@ -10,7 +10,7 @@ const User = ModelBase.extend({
     return this.hasMany(Note)
   },
   validate: {
-    name: Joi.string().required(),
+    username: Joi.string().required(),
     email: Joi.string()
       .email()
       .required()

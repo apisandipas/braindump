@@ -1,11 +1,10 @@
-/*global exports*/
-exports.up = function(knex) {
-  return knex.schema.createTable('users', function(table) {
+exports.up = knex =>
+  knex.schema.createTable('users', table => {
     table.increments('id').primary()
     table.string('email')
     table.unique('email')
-    table.string('name').notNull()
     table.string('username')
+    table.unique('username')
     table.text('password_digest').notNull()
     table.dateTime('created_at').notNull()
     table.dateTime('updated_at').nullable()
@@ -16,8 +15,5 @@ exports.up = function(knex) {
     table.string('password_reset_token')
     table.string('password_reset_expires')
   })
-}
 
-exports.down = function(knex) {
-  return knex.schema.dropTable('users')
-}
+exports.down = knex => knex.schema.dropTable('users')

@@ -1,6 +1,6 @@
 type User {
   id: ID!
-  name: String!
+  username: String!
   email: String!
   notes: [Note!]!
 }
@@ -10,8 +10,14 @@ type Query {
   getUser(id: ID!): User
 }
 
+type UserMutationResponse {
+  ok: Boolean!
+  user: User
+  errors: [Error!]
+}
+
 type Mutation {
-  register(username: String!, email: String!, password: String!): User!
-  updateUser(id: ID!): User!
+  register(username: String!, email: String!, password: String!): UserMutationResponse!
+  updateUser(id: ID!): UserMutationResponse!
   deleteUser(id: ID!): Boolean!
 }

@@ -1,6 +1,5 @@
-/*global exports*/
-exports.up = function(knex) {
-  return knex.schema.createTable('notes', function(table) {
+exports.up = knex =>
+  knex.schema.createTable('notes', table => {
     table.increments('id').primary()
     table.string('title').notNull()
     table.text('body').notNull()
@@ -8,8 +7,5 @@ exports.up = function(knex) {
     table.dateTime('created_at').notNull()
     table.dateTime('updated_at').nullable()
   })
-}
 
-exports.down = function(knex) {
-  return knex.schema.dropTable('notes')
-}
+exports.down = knex => knex.schema.dropTable('notes')

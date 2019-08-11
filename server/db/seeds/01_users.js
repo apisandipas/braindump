@@ -1,31 +1,43 @@
-/*global exports require*/
 const faker = require('faker')
 const range = require('lodash.range')
 const map = require('lodash.map')
-exports.seed = function(knex) {
+const bcrypt = require('bcrypt')
+
+const PASSWORD = 'password123'
+
+const hashPassword = async (password = PASSWORD) => {
+  const hashedPassword = await bcrypt.hash(password, 12)
+  return hashedPassword
+}
+
+exports.seed = async knex => {
+  const password_digest = await hashPassword()
+
   // Deletes ALL existing entries
-  return knex('users')
-    .del()
-    .then(function() {
-      let users = map(range(1, 10, 1), i => {
-        return {
-          id: i,
-          email: faker.internet.email(),
-          name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-          password_digest: faker.random.uuid(),
-          created_at: new Date(),
-          updated_at: new Date()
-        }
-      })
-      users.push({
-        id: 100,
-        email: faker.internet.email(),
-        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        password_digest: faker.random.uuid(),
-        role: 'ADMIN',
-        created_at: new Date(),
-        updated_at: new Date()
-      })
-      return knex('users').insert(users)
-    })
+  await knex('users').del()
+
+  // Create 10 new Users
+  let users = map(range(1, 10, 1), i => {
+    return {
+      id: i,
+      email: faker.internet.email(),
+      username: faker.internet.userName(),
+      password_digest,
+      created_at: new Date(),
+      updated_at: new Date()
+    }
+  })
+
+  // Create an admin
+  users.push({
+    id: 100,
+    email: faker.internet.email(),
+    username: faker.internet.userName(),
+    password_digest,
+    role: 'ADMIN',
+    created_at: new Date(),
+    updated_at: new Date()
+  })
+
+  await knex('users').insert(users)
 }

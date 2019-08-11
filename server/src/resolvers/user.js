@@ -1,3 +1,4 @@
+import { formatErrors } from 'services/utils'
 export default {
   User: {},
   Query: {
@@ -23,20 +24,37 @@ export default {
       try {
         const existingUser = await models.User.findOne({ email: args.email })
         if (existingUser) {
-          return new Error('Email is already taken')
+          return {
+            ok: false,
+            errors: [{ path: 'email', message: 'This email is already taken.' }]
+          }
         }
         const user = await models.User.create(args)
-        return user.toJSON()
+        return {
+          ok: true,
+          user: user.toJSON()
+        }
       } catch (err) {
-        return new Error(err.message)
+        console.log('err', err)
+        return {
+          ok: false,
+          errors: formatErrors(err)
+        }
       }
     },
     updateUser: async (parent, { id, ...args }, { models }) => {
       try {
         const user = await models.User.update(args, { id })
-        return user.toJSON()
+        return {
+          ok: true,
+          user: user.toJSON()
+        }
       } catch (err) {
-        return new Error(err.message)
+        console.log('err', err)
+        return {
+          ok: false,
+          errors: formatErrors(err)
+        }
       }
     },
     deleteUser: async (parent, args, { models }) => {
