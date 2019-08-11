@@ -6,11 +6,14 @@ const User = ModelBase.extend({
   tableName: 'users',
   hasSecurePassword: true,
   hidden: ['password_digest', 'password_reset_token', 'password_reset_expires'],
+
   notes() {
     return this.hasMany(Note)
   },
+
   validate: {
     username: Joi.string().required(),
+    password_digest: Joi.string(),
     email: Joi.string()
       .email()
       .required()
