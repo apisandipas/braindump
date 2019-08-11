@@ -1,3 +1,5 @@
+import { formatErrors } from 'services/utils'
+
 export default {
   Note: {},
   Query: {
@@ -22,17 +24,35 @@ export default {
     createNote: async (parent, { values }, { models }) => {
       try {
         const note = await models.Note.create(values)
-        return note.json()
+        if (note) {
+          return {
+            ok: true,
+            note: note.toJSON()
+          }
+        }
       } catch (err) {
-        return new Error(err.message)
+        console.log('createNote err', err)
+        return {
+          ok: false,
+          errors: formatErrors(err)
+        }
       }
     },
     updateNote: async (parent, { id, values }, { models }) => {
       try {
         const note = await models.Note.update(values, { id })
-        return note.toJSON()
+        if (note) {
+          return {
+            ok: true,
+            note: note.toJSON()
+          }
+        }
       } catch (err) {
-        return new Error(err.message)
+        console.log('updateNote err', err)
+        return {
+          ok: false,
+          errors: formatErrors(err)
+        }
       }
     },
     deleteNote: async (parent, args, { models }) => {

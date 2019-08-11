@@ -5,14 +5,20 @@ type Note {
   updatedAt: String!
 }
 
+type NoteMutationResponse {
+  ok: Boolean!
+  user: Note
+  errors: [Error!]
+}
+
 type Query {
   allNotes: [Note]!
   getNote(id: ID!): Note!
 }
 
 type Mutation {
-  createNote(values: NoteInput): Note!
-  updateNote(id: ID!, values: NoteInput): Note!
+  createNote(values: NoteInput): NoteMutationResponse!
+  updateNote(id: ID!, values: NoteInput): NoteMutationResponse!
   deleteNote(id: ID!): Boolean!
 }
 

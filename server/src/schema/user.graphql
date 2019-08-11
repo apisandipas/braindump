@@ -5,15 +5,15 @@ type User {
   notes: [Note!]!
 }
 
-type Query {
-  allUsers: [User]!
-  getUser(id: ID!): User
-}
-
 type UserMutationResponse {
   ok: Boolean!
   user: User
   errors: [Error!]
+}
+
+type Query {
+  allUsers: [User]!
+  getUser(id: ID!): User
 }
 
 type Mutation {
