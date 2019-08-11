@@ -1,14 +1,11 @@
 import User from 'models/user'
-// import Note from 'models/note'
 
 export default {
   // User: {},
   Query: {
     getUser: async (parent, { id }) => {
       try {
-        const user = await User.where('id', id).fetch({
-          withRelated: ['notes']
-        })
+        const user = await User.where('id', id).fetch()
         return user.toJSON()
       } catch (err) {
         return new Error(err.message)
@@ -16,7 +13,7 @@ export default {
     },
     allUsers: async () => {
       try {
-        const users = await User.fetchAll({ withRelated: ['notes'] })
+        const users = await User.fetchAll()
         return users.toJSON()
       } catch (err) {
         return new Error(err.message)
