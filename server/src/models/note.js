@@ -4,7 +4,6 @@ import Joi from '@hapi/joi'
 
 const Note = ModelBase.extend({
   tableName: 'notes',
-  hasTimestamps: ['created_at', 'updated_at'],
   user() {
     return this.belongsTo(User)
   },

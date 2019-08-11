@@ -19,9 +19,9 @@ export default {
     }
   },
   Mutation: {
-    createNote: async (parent, args, { models }) => {
+    createNote: async (parent, { values }, { models }) => {
       try {
-        const note = await models.Note.create(args)
+        const note = await models.Note.create(values)
         return note.json()
       } catch (err) {
         return new Error(err.message)

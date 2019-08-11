@@ -1,5 +1,5 @@
 export default {
-  // User: {},
+  User: {},
   Query: {
     getUser: async (parent, { id }, { models }) => {
       try {
@@ -21,7 +21,10 @@ export default {
   Mutation: {
     register: async (parent, args, { models }) => {
       try {
-        // TODO: update to hash password with bcrypt
+        const existingUser = await models.User.findOne({ email: args.email })
+        if (existingUser) {
+          return new Error('Email is already taken')
+        }
         const user = await models.User.create(args)
         return user.toJSON()
       } catch (err) {
