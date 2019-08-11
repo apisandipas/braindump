@@ -17,9 +17,9 @@
     - Add registration flow for Users w/ proper password hashing
       - Resolve user via JWT in header
   - Add Notes
-    - Graphql Type, Queries and Mutations
-    - Model, Seed, Migration, Relations and Validations
-    - CRUD Resolvers
+    - ~~Graphql Type, Queries and Mutations~~
+    - ~~Model, Seed, Migration, Relations and Validations~~
+    - ~~CRUD Resolvers~~
   - Add Notebooks
     - Graphql Type, Queries and Mutations
     - Model, Seed, Migration, Relations and Validations
