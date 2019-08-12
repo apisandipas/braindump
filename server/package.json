@@ -30,6 +30,7 @@
     "bookshelf-modelbase": "^2.10.4",
     "bookshelf-secure-password": "^3.1.0",
     "cors": "^2.8.5",
+    "db-errors": "^0.2.3",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "global": "^4.4.0",
@@ -37,13 +38,15 @@
     "joi": "^14.3.1",
     "knex": "^0.19.1",
     "merge-graphql-schemas": "^1.6.2-bdaf070.0",
-    "mysql": "^2.17.1"
+    "mysql": "^2.17.1",
+    "pg": "^7.12.1"
   },
   "scripts": {
     "start": "DEBUG=knex:query NODE_PATH=src/ nodemon --exec babel-node src/index.js",
     "build": "babel src -d build",
     "serve": "NODE_ENV=production NODE_PATH=build/ node build/index.js",
     "db:migrate": "knex migrate:latest",
+    "db:migrate:rollback": "knex migrate:rollback",
     "db:seed": "knex seed:run"
   },
   "husky": {

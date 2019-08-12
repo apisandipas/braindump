@@ -1,4 +1,4 @@
-import { formatErrors } from 'services/utils'
+import { formatErrors } from 'services/errors'
 export default {
   User: {},
   Query: {
@@ -26,7 +26,7 @@ export default {
         if (existingUser) {
           return {
             ok: false,
-            errors: [{ path: 'email', message: 'This email is already taken.' }]
+            errors: [{ path: 'email', message: `Error! Your must pick a unique email.` }]
           }
         }
         const user = await models.User.create(args)

@@ -1,4 +1,4 @@
-import { formatErrors } from 'services/utils'
+import { formatErrors } from 'services/errors'
 
 export default {
   Note: {},

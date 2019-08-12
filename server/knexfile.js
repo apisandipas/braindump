@@ -2,11 +2,11 @@
 // Update with your config settings.
 require('dotenv').config()
 
-const { DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = process.env
+const { DB_DRIVER, DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME } = process.env
 
 module.exports = {
   development: {
-    client: 'mysql',
+    client: DB_DRIVER,
     connection: {
       host: DB_HOST,
       port: DB_PORT,
@@ -16,7 +16,7 @@ module.exports = {
     },
     pool: {
       min: 2,
-      max: 10
+      max: 50
     },
     migrations: {
       directory: './db/migrations',
