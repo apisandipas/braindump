@@ -28,10 +28,6 @@
       "node": {
         "moduleDirectory": ["node_modules", "src/"]
       }
-    },
-    "react": {
-      "pragma": "React",
-      "version": "detect"
     }
   }
 }
