@@ -37,7 +37,6 @@
 ## Client
 
 - Todo
-  - ~~Razzle setup~~
   - Design client.
     - Figma?
     - Dark theme based on Arc-Dark
