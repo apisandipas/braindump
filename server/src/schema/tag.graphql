@@ -1,0 +1,26 @@
+type Tag {
+  id: ID!
+  name: String
+  notes: [Note!]
+}
+
+type TagMutationResponse {
+  ok: Boolean!
+  tag: Tag
+  errors: [Error!]
+}
+
+type Query {
+  allTags: [Tag]!
+  getTag(id: ID!): Tag!
+}
+
+type Mutation {
+  createTag(values: TagInput): TagMutationResponse!
+  updateTag(id: ID!, values: TagInput): TagMutationResponse!
+  deleteTag(id: ID!): Boolean!
+}
+
+input TagInput {
+  name: String!
+}

@@ -1,6 +1,7 @@
 import db, { ModelBase } from 'database'
 import User from './user'
 import Notebook from './notebook'
+import Tag from './tag'
 import Joi from '@hapi/joi'
 
 const Note = ModelBase.extend({
@@ -10,6 +11,9 @@ const Note = ModelBase.extend({
   },
   notebook() {
     return this.belongsTo(Notebook)
+  },
+  tags() {
+    return this.belongsToMany(Tag)
   },
   validate: {
     title: Joi.string()

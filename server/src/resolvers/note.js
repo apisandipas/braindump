@@ -1,7 +1,21 @@
 import { formatErrors } from 'services/errors'
+import { knex } from 'database'
 
 export default {
-  Note: {},
+  Note: {
+    tags: async (parent, args, { models }) => {
+      try {
+        // TODO Refactor this when I figure out how to access the related tags directly
+        const tagIds = await knex('notes_tags')
+          .where('note_id', parent.id)
+          .map(i => i.tag_id)
+        const tags = await models.Tag.where('id', 'IN', tagIds).fetchAll()
+        return tags.toJSON()
+      } catch (err) {
+        return new Error(err.message)
+      }
+    }
+  },
   Query: {
     getNote: async (parent, { id }, { models }) => {
       try {
