@@ -5,7 +5,7 @@ import makeModelBase, { pluggable as baseModelPlugin } from 'bookshelf-modelbase
 import securePassword from 'bookshelf-secure-password'
 
 const env = process.env.NODE_ENV || 'development' // eslint-disable-line no-undef
-const knex = Knex(knexConfig[env])
+export const knex = Knex(knexConfig[env])
 
 const db = bookshelf(knex)
 

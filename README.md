@@ -48,3 +48,7 @@
     - ThemeProvider
     - Bootstrap Styled
   - Setup loadable-components
+
+## Trello Board (contact for access)
+
+https://trello.com/b/XnjOdyXr/noteapp

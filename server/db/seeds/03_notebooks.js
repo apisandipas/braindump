@@ -7,7 +7,7 @@ exports.seed = async knex => {
   // Deletes ALL existing entries
   await knex('notebooks').del()
 
-  // Create 100 Notes
+  // Create 10 Notesbooks
   const notebooks = map(range(1, 9, 1), i => {
     const user_id = random(1, 9)
 
