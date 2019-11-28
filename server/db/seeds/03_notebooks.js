@@ -5,22 +5,20 @@ const random = require('lodash.random')
 
 exports.seed = async knex => {
   // Deletes ALL existing entries
-  await knex('notes').del()
+  await knex('notebooks').del()
 
   // Create 100 Notes
-  const notes = map(range(1, 100, 1), i => {
+  const notebooks = map(range(1, 9, 1), i => {
     const user_id = random(1, 9)
-    const notebook_id = random(1, 9)
+
     return {
       id: i,
       user_id,
-      notebook_id,
-      title: i + ' ' + faker.lorem.words(),
-      body: faker.lorem.paragraphs(5),
+      name: i + ' ' + faker.lorem.words(),
       created_at: new Date(),
       updated_at: new Date()
     }
   })
 
-  await knex('notes').insert(notes)
+  await knex('notebooks').insert(notebooks)
 }

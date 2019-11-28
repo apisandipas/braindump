@@ -1,6 +1,16 @@
 import { formatErrors } from 'services/errors'
 export default {
-  User: {},
+  User: {
+    notes: async (parent, args, { models }) => {
+      try {
+        const notes = await models.Note.where({ user_id: parent.id }).fetch()
+        const notesJSON = notes.toJSON()
+        return notesJSON.length ? notesJSON : [notesJSON]
+      } catch (err) {
+        return new Error(err.message)
+      }
+    }
+  },
   Query: {
     getUser: async (parent, { id }, { models }) => {
       try {
@@ -26,7 +36,12 @@ export default {
         if (existingUser) {
           return {
             ok: false,
-            errors: [{ path: 'email', message: `Error! Your must pick a unique email.` }]
+            errors: [
+              {
+                path: 'email',
+                message: `Error! Your must pick a unique email.`
+              }
+            ]
           }
         }
         const user = await models.User.create(args)

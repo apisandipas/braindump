@@ -2,7 +2,7 @@ type User {
   id: ID!
   username: String!
   email: String!
-  notes: [Note!]!
+  notes: [Note!]
 }
 
 type UserMutationResponse {
@@ -17,7 +17,11 @@ type Query {
 }
 
 type Mutation {
-  register(username: String!, email: String!, password: String!): UserMutationResponse!
+  register(
+    username: String!
+    email: String!
+    password: String!
+  ): UserMutationResponse!
   updateUser(id: ID!): UserMutationResponse!
   deleteUser(id: ID!): Boolean!
 }

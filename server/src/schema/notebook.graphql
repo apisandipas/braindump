@@ -1,0 +1,26 @@
+type Notebook {
+  id: ID!
+  name: String!
+  notes: [Note!]
+}
+
+type NotebookMutationResponse {
+  ok: Boolean!
+  notebook: Notebook
+  errors: [Error!]
+}
+
+type Query {
+  allNotebooks: [Notebook!]
+  getNotebook(id: ID!): Notebook!
+}
+
+type Mutation {
+  createNotebook(values: NotebookInput): NoteMutationResponse!
+  updateNotebook(id: ID!, values: NotebookInput): NoteMutationResponse!
+  deleteNotebook(id: ID!): Boolean!
+}
+
+type NotebookInput {
+  name: String!
+}

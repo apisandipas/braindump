@@ -7,7 +7,7 @@ type Note {
 
 type NoteMutationResponse {
   ok: Boolean!
-  user: Note
+  note: Note
   errors: [Error!]
 }
 
