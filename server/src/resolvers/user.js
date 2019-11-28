@@ -1,6 +1,17 @@
 import { formatErrors } from 'services/errors'
 export default {
   User: {
+    notebooks: async (parent, args, { models }) => {
+      try {
+        const notebooks = await models.Notebook.where({
+          user_id: parent.id
+        }).fetch()
+        const notebooksJSON = notebooks.toJSON()
+        return notebooksJSON.length ? notebooksJSON : [notebooksJSON]
+      } catch (err) {
+        return new Error(err.message)
+      }
+    },
     notes: async (parent, args, { models }) => {
       try {
         const notes = await models.Note.where({ user_id: parent.id }).fetch()

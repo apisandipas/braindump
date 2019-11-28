@@ -21,6 +21,6 @@ type Mutation {
   deleteNotebook(id: ID!): Boolean!
 }
 
-type NotebookInput {
+input NotebookInput {
   name: String!
 }

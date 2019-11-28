@@ -1,7 +1,19 @@
 import { formatErrors } from 'services/errors'
 
 export default {
-  Notebook: {},
+  Notebook: {
+    notes: async (parent, args, { models }) => {
+      try {
+        const notes = await models.Note.where({
+          notebook_id: parent.id
+        }).fetch()
+        const notesJSON = notes.toJSON()
+        return notesJSON.length ? notesJSON : [notesJSON]
+      } catch (err) {
+        return new Error(err.message)
+      }
+    }
+  },
   Query: {
     getNotebook: async (parent, { id }, { models }) => {
       try {
@@ -37,31 +49,31 @@ export default {
           errors: formatErrors(err)
         }
       }
-    }
-  },
-  updateNotebook: async (parent, { id, values }, { models }) => {
-    try {
-      const notebook = await models.Notebook.update(values, { id })
-      if (notebook) {
+    },
+    updateNotebook: async (parent, { id, values }, { models }) => {
+      try {
+        const notebook = await models.Notebook.update(values, { id })
+        if (notebook) {
+          return {
+            ok: true,
+            note: notebook.toJSON()
+          }
+        }
+      } catch (err) {
+        console.log('updateNote err', err)
         return {
-          ok: true,
-          note: notebook.toJSON()
+          ok: false,
+          errors: formatErrors(err)
         }
       }
-    } catch (err) {
-      console.log('updateNote err', err)
-      return {
-        ok: false,
-        errors: formatErrors(err)
+    },
+    deleteNotebook: async (parent, args, { models }) => {
+      try {
+        await models.Notebook.destroy(args)
+        return true
+      } catch (err) {
+        return false
       }
-    }
-  },
-  deleteNotebook: async (parent, args, { models }) => {
-    try {
-      await models.Notebook.destroy(args)
-      return true
-    } catch (err) {
-      return false
     }
   }
 }

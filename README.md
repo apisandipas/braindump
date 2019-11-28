@@ -21,9 +21,9 @@
     - ~~Model, Seed, Migration, Relations and Validations~~
     - ~~CRUD Resolvers~~
   - Add Notebooks
-    - Graphql Type, Queries and Mutations
-    - Model, Seed, Migration, Relations and Validations
-    - CRUD Resolvers
+    - ~~Graphql Type, Queries and Mutations~~
+    - ~~Model, Seed, Migration, Relations and Validations~~
+    - ~~CRUD Resolvers~~
   - Add Tags
     - Graphql Type, Queries and Mutations
     - Model, Seed, Migration, Relations and Validations
