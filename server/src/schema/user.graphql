@@ -25,6 +25,4 @@ type Mutation {
   ): UserMutationResponse!
   updateUser(id: ID!): UserMutationResponse!
   deleteUser(id: ID!): Boolean!
-  login(email: String!, password: String!): UserMutationResponse
-  invalidateTokens: Boolean!
 }
