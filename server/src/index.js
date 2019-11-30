@@ -19,7 +19,7 @@ app.use(cors('*'))
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: { models },
+  context: ({ req, res }) => ({ models, req, res }),
   playground: process.env.NODE_ENV === 'development'
 })
 
