@@ -1,49 +1,15 @@
-import bcrypt from 'bcrypt'
-import { formatErrors } from 'services/errors'
-import { createTokens } from 'services/auth'
-
-const invalidCredentialsResponse = {
-  ok: false,
-  error: {
-    path: 'invalid-credentials',
-    message: 'Error! Invalid credentials'
-  }
-}
+import { tryLogin } from 'services/auth'
 
 export default {
   Query: {
     me: async (_, __, { req, models }) => {
-      if (!req.userId) return null
-      const user = await models.User.where({ id: req.userId }).fetch()
+      if (!req.user || !req.user.id) return null
+      const user = await models.User.where({ id: req.user.id }).fetch()
       return user.toJSON()
     }
   },
   Mutation: {
-    login: async (_, { email, password }, { models, res }) => {
-      try {
-        const user = await models.User.where({ email }).fetch()
-        if (!user) return invalidCredentialsResponse
-
-        const valid = await bcrypt.compare(password, user.get('passwordDigest'))
-        if (!valid) return invalidCredentialsResponse
-
-        const { accessToken, refreshToken } = createTokens(user)
-
-        res.cookie('refresh-token', refreshToken)
-        res.cookie('access-token', accessToken)
-
-        return {
-          ok: true,
-          user: user.toJSON()
-        }
-      } catch (err) {
-        // throw err
-        return {
-          ok: false,
-          errors: formatErrors(err)
-        }
-      }
-    },
+    login: async (_, { email, password }) => tryLogin(email, password),
     invalidateTokens: async (_, __, { req, models }) => {
       if (!req.userId) {
         return false

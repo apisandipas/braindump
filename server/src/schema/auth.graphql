@@ -1,8 +1,15 @@
+type LoginResponse {
+  ok: Boolean!
+  token: String
+  refreshToken: String
+  errors: [Error!]
+}
+
 type Query {
   me: User
 }
 
 type Mutation {
-  login(email: String!, password: String!): UserMutationResponse
+  login(email: String!, password: String!): LoginResponse
   invalidateTokens: Boolean!
 }

@@ -4,6 +4,7 @@ type Note {
   body: String!
   updatedAt: String!
   tags: [Tag!]
+  notebook_id: ID!
 }
 
 type NoteMutationResponse {
