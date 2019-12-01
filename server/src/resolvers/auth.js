@@ -1,4 +1,5 @@
 import { tryLogin } from 'services/auth'
+import { formatErrors } from 'services/errors'
 
 export default {
   Query: {
@@ -9,19 +10,35 @@ export default {
     }
   },
   Mutation: {
-    login: async (_, { email, password }) => tryLogin(email, password),
-    invalidateTokens: async (_, __, { req, models }) => {
-      if (!req.userId) {
-        return false
+    register: async (parent, args, { models }) => {
+      try {
+        const existingUser = await models.User.findOne({ email: args.email }, { require: false })
+        if (existingUser) {
+          return {
+            ok: false,
+            errors: [
+              {
+                path: 'email',
+                message: `Error! Your must pick a unique email.`
+              }
+            ]
+          }
+        }
+        const user = await models.User.create(args)
+        if (user) {
+          return {
+            ok: true,
+            user: user.toJSON()
+          }
+        }
+      } catch (err) {
+        console.log('register err', JSON.stringify(err))
+        return {
+          ok: false,
+          errors: formatErrors(err)
+        }
       }
-
-      models.User.query()
-        .where({ id: req.userId })
-        .increment('count', 1)
-
-      req.clearCookie('access-token')
-
-      return true
-    }
+    },
+    login: async (_, { email, password }) => tryLogin(email, password)
   }
 }

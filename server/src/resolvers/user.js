@@ -41,35 +41,6 @@ export default {
     }
   },
   Mutation: {
-    register: async (parent, args, { models }) => {
-      try {
-        const existingUser = await models.User.findOne({ email: args.email }, { require: false })
-        if (existingUser) {
-          return {
-            ok: false,
-            errors: [
-              {
-                path: 'email',
-                message: `Error! Your must pick a unique email.`
-              }
-            ]
-          }
-        }
-        const user = await models.User.create(args)
-        if (user) {
-          return {
-            ok: true,
-            user: user.toJSON()
-          }
-        }
-      } catch (err) {
-        console.log('register err', JSON.stringify(err))
-        return {
-          ok: false,
-          errors: formatErrors(err)
-        }
-      }
-    },
     updateUser: async (parent, { id, ...args }, { models }) => {
       try {
         const user = await models.User.update(args, { id })
