@@ -66,7 +66,7 @@ export default {
           subject: 'Password help has arrived!',
           context: {
             url: `https://${APP_DOMAIN}/reset-password?token=${token}`,
-            name: user.get('name').split(' ')[0]
+            name: user.get('username')
           }
         }
 
@@ -101,7 +101,7 @@ export default {
           template: 'password-reset',
           subject: 'Password Reset Confirmation',
           context: {
-            name: user.get('name').split(' ')[0]
+            name: user.get('username')
           }
         }
         await mailer.sendMail(emailData)
