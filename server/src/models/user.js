@@ -13,10 +13,15 @@ const User = ModelBase.extend({
 
   validate: {
     username: Joi.string().required(),
-    password_digest: Joi.string(),
+    passwordDigest: Joi.string(),
+    passwordResetToken: Joi.any(),
+    passwordResetExpires: Joi.any(),
     email: Joi.string()
       .email()
-      .required()
+      .required(),
+    role: Joi.string(),
+    createdAt: Joi.date().required(),
+    updatedAt: Joi.date()
   }
 })
 

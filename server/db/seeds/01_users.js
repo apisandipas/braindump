@@ -17,9 +17,8 @@ exports.seed = async knex => {
   await knex('users').del()
 
   // Create 10 new Users
-  let users = map(range(1, 10, 1), i => {
+  let users = map(range(1, 10, 1), () => {
     return {
-      id: i,
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password_digest,
@@ -30,8 +29,8 @@ exports.seed = async knex => {
 
   // Create an admin
   users.push({
-    id: 100,
-    email: faker.internet.email(),
+    // id: 100,
+    email: 'bparonto@gmail.com',
     username: faker.internet.userName(),
     password_digest,
     role: 'ADMIN',

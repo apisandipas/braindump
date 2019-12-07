@@ -55,8 +55,8 @@ export default {
         const randomBytes = promisify(crypto.randomBytes)
         const buffer = await randomBytes(20)
         const token = buffer.toString('hex')
-        user.set('password_reset_token', token)
-        user.set('password_reset_expires', Date.now() + TWENTY_FOUR_HOURS)
+        user.set('passwordResetToken', token)
+        user.set('passwordResetExpires', Date.now() + TWENTY_FOUR_HOURS)
         await user.save()
 
         const emailData = {
@@ -76,6 +76,7 @@ export default {
           ok: true
         }
       } catch (err) {
+        console.log('err', err)
         return {
           ok: false,
           error: formatErrors(err)
@@ -92,8 +93,8 @@ export default {
           throw new Error("Passwords don't match!")
         }
         user.set('password', password)
-        user.set('password_reset_token', null)
-        user.set('password_reset_expires', null)
+        user.set('passwordResetToken', null)
+        user.set('passwordResetExpires', null)
         await user.save()
         const emailData = {
           to: user.get('email'),
@@ -109,6 +110,7 @@ export default {
           ok: true
         }
       } catch (err) {
+        console.log('err', err)
         return {
           ok: false,
           errors: formatErrors(err)
