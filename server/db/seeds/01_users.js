@@ -22,8 +22,8 @@ exports.seed = async knex => {
       email: faker.internet.email(),
       username: faker.internet.userName(),
       password_digest,
-      created_at: new Date(),
-      updated_at: new Date()
+      created_at: faker.date.recent(),
+      updated_at: faker.date.recent()
     }
   })
 
@@ -34,8 +34,8 @@ exports.seed = async knex => {
     username: faker.internet.userName(),
     password_digest,
     role: 'ADMIN',
-    created_at: new Date(),
-    updated_at: new Date()
+    created_at: faker.date.recent(),
+    updated_at: faker.date.recent()
   })
 
   await knex('users').insert(users)

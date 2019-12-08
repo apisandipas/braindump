@@ -8,12 +8,14 @@ exports.up = knex => {
         .unsigned()
         .index()
         .references('tags.id')
+        .onDelete('CASCADE')
       table
         .integer('note_id')
         .notNull()
         .unsigned()
         .index()
         .references('notes.id')
+        .onDelete('CASCADE')
     }),
     knex.schema.createTable('tags', table => {
       table.increments('id').primary()
