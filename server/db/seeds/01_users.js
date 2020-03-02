@@ -1,12 +1,12 @@
 const faker = require('faker')
 const range = require('lodash.range')
 const map = require('lodash.map')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 const PASSWORD = 'password123'
 
 const hashPassword = async (password = PASSWORD) => {
-  const hashedPassword = await bcrypt.hash(password, 12)
+  const hashedPassword = await bcrypt.hashSync(password, 12)
   return hashedPassword
 }
 

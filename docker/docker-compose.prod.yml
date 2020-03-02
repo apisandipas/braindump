@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  noteapp-client-prod:
+    container_name: noteapp-client-prod
+    build:
+      context: ../
+      dockerfile: docker/client/Dockerfile.prod
+    ports:
+      - '80:80'
+  noteapp-server-prod:
+    container_name: noteapp-client-prod
+    build:
+      context: ../
+      dockerfile: docker/client/Dockerfile.prod
+    ports:
+      - '5001:5000'
+  db:
+    image: postgres:9.6.17
+    container_name: noteapp-db-prod
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: somethingsecret

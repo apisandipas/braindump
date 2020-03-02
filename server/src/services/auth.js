@@ -1,5 +1,5 @@
 import { sign, decode, verify } from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import models from 'models'
 
 export const createTokens = (user, ACCESS_TOKEN_SECRET, refreshSecret) => {
@@ -79,7 +79,7 @@ export const tryLogin = async (email, password) => {
   const user = await models.User.where({ email }).fetch()
   if (!user) return invalidCredentialsResponse
 
-  const valid = await bcrypt.compare(password, user.get('passwordDigest'))
+  const valid = await bcrypt.hashSync(password, user.get('passwordDigest'))
   if (!valid) return invalidCredentialsResponse
 
   const refreshSecret = user.get('passwordDigest') + REFRESH_TOKEN_SECRET
