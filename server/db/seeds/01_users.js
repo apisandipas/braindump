@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs')
 const PASSWORD = 'password123'
 
 const hashPassword = async (password = PASSWORD) => {
-  const hashedPassword = await bcrypt.hashSync(password, 12)
+  const hashedPassword = await bcrypt.hash(password, 12)
   return hashedPassword
 }
 

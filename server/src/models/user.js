@@ -1,10 +1,11 @@
 import db, { ModelBase } from 'database'
+
 import Note from './note'
 import Joi from '@hapi/joi'
 
 const User = ModelBase.extend({
   tableName: 'users',
-  hasSecurePassword: 'passwordDigest',
+  hasSecurePassword: true,
   hidden: ['password_digest', 'password_reset_token', 'password_reset_expires'],
 
   notes() {

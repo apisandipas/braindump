@@ -15,7 +15,7 @@ services:
       dockerfile: docker/client/Dockerfile.prod
     ports:
       - '5001:5000'
-  db:
+  noteapp-db-prod:
     image: postgres:9.6.17
     container_name: noteapp-db-prod
     restart: always
