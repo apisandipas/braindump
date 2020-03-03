@@ -2,12 +2,15 @@
 
 ## Scripts
 
-| Scripts          | Description                      | Client                | Server |
-| ---------------- | -------------------------------- | --------------------- | ------ |
-| docker-up:dev    | Start up dev environment         | http://localhost:3001 |        |
-| docker-up:prod   | Start up build environment       | http://localhost:80   |        |
-| docker-down:dev  | Tear down running dev instance   |                       |        |
-| docker-down:prod | Tear down running build instance |                       |        |
+| Scripts             | Description                      | Client                | Server |
+| ------------------- | -------------------------------- | --------------------- | ------ |
+| docker-up:dev       | Start up dev environment         | http://localhost:3001 |        |
+| docker-up:prod      | Start up build environment       | http://localhost:80   |        |
+| docker-down:dev     | Tear down running dev instance   |                       |        |
+| docker-down:prod    | Tear down running build instance |                       |        |
+| db:migrate          | Run the DB migrations            |                       |        |
+| db:migrate:rollback | Rollback the DB migrations       |                       |        |
+| db:seed             | The the database                 |                       |        |
 
 ## Server
 

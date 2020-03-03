@@ -8,7 +8,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
 # Intall deps
-RUN apk --no-cache add --virtual  builds-deps build-base python git
+RUN apk --no-cache add --virtual builds-deps build-base python git
 
 # install and cache app dependencies
 COPY server/package.json /app/package.json
