@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   noteapp-client-dev:
@@ -7,10 +7,10 @@ services:
       context: ../
       dockerfile: docker/client/Dockerfile.dev
     volumes:
-      - '../client:/app'
-      - '/app/node_modules'
+      - "../client:/app"
+      - "/app/node_modules"
     ports:
-      - '3001:3000'
+      - "3001:3000"
     environment:
       - NODE_ENV=development
 
@@ -20,10 +20,10 @@ services:
       context: ../
       dockerfile: docker/server/Dockerfile.dev
     volumes:
-      - '../server:/app'
-      - '/app/node_modules'
+      - "../server:/app"
+      - "/app/node_modules"
     ports:
-      - '5001:5000'
+      - "5001:5000"
     environment:
       - NODE_ENV=development
 
@@ -32,16 +32,12 @@ services:
     container_name: noteapp-db-dev
     restart: always
     ports:
-      - '54320:5432'
+      - "54320:5432"
     volumes:
       - database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
-networks:
-  noteapp_network:
-    driver: bridge
 
 volumes:
   database:
