@@ -1557,7 +1557,7 @@ bookshelf-modelbase@apisandipas/bookshelf-modelbase#master:
     lodash.difference "^4.4.0"
     xtend "^4.0.1"
 
-bookshelf-secure-password@apisandipas/bookshelf-secure-password#master:
+bookshelf-secure-password@apisandipas/bookshelf-secure-password:
   version "5.0.0"
   resolved "https://codeload.github.com/apisandipas/bookshelf-secure-password/tar.gz/4d7560d9aa276148daf64c7722054bfca7704dd9"
   dependencies:

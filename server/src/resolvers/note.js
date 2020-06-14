@@ -25,7 +25,11 @@ export default {
         return new Error(err.message)
       }
     },
-    allNotes: async (parent, args, { models }) => {
+    allNotes: async (parent, args, { models, req }) => {
+      if (!req.user) {
+        return new Error('Unauthorized!')
+      }
+
       try {
         const notes = await models.Note.fetchAll()
         return notes.toJSON()
