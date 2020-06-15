@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import {
@@ -14,7 +14,7 @@ import {
   FormControl
 } from "@apisandipas/bssckit";
 import styled from "styled-components";
-import { setTokens } from "utils/auth";
+import { setTokens, AuthContext } from "utils/auth";
 import { isValidEmail } from "../../utils/validation";
 
 const AuthFormWrapper = styled.div`
@@ -44,13 +44,11 @@ const LOGIN_MUTATION = gql`
 
 function Login() {
   const history = useHistory();
-  const location = useLocation();
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
-
-  console.log("loc", location.pathname);
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const { isAuthenticated } = useContext(AuthContext);
 
   const onSubmit = async event => {
     event.preventDefault();
@@ -75,6 +73,10 @@ function Login() {
       console.error("error", errors);
     }
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div>
