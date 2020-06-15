@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 import {
   Alert,
   H5,
@@ -44,10 +44,13 @@ const LOGIN_MUTATION = gql`
 
 function Login() {
   const history = useHistory();
+  const location = useLocation();
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION);
+
+  console.log("loc", location.pathname);
 
   const onSubmit = async event => {
     event.preventDefault();
@@ -63,9 +66,6 @@ function Login() {
     }
 
     const response = await login({ variables: { email, password } });
-
-    console.log("res", response);
-
     const { ok, token, refreshToken, errors } = response.data.login;
 
     if (ok) {

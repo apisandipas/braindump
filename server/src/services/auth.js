@@ -1,104 +1,74 @@
-import { sign, decode, verify } from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import models from 'models'
+import { sign } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import models from "models";
 
-const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 export const createTokens = user => {
-  const accessToken = sign(
+  const token = sign(
     {
       user: {
-        id: user.get('id'),
-        email: user.get('email'),
-        username: user.get('username'),
-        role: user.get('role')
+        id: user.get("id"),
+        email: user.get("email"),
+        username: user.get("username"),
+        role: user.get("role")
       }
     },
     ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '1hr'
+      expiresIn: "1hr"
     }
-  )
+  );
 
   const refreshToken = sign(
     {
       user: {
-        id: user.get('id'),
-        invalidationCount: user.get('invalidationCount')
+        id: user.get("id"),
+        invalidationCount: user.get("invalidationCount")
       }
     },
     REFRESH_TOKEN_SECRET,
     {
-      expiresIn: '7d'
+      expiresIn: "7d"
     }
-  )
+  );
 
-  return { accessToken, refreshToken }
-}
-
-export const refreshTokens = async (refreshToken, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET) => {
-  let userId
-  try {
-    const {
-      user: { id }
-    } = decode(refreshToken)
-    userId = id
-  } catch (err) {
-    return {}
-  }
-
-  if (!userId) return {}
-
-  const user = await models.User.where({ id: userId }).fetch()
-
-  if (!user) return {}
-
-  const refreshSecret = user.get('passwordHash') + REFRESH_TOKEN_SECRET
-
-  try {
-    verify(refreshToken, refreshSecret)
-  } catch (err) {
-    return {}
-  }
-
-  const { accessToken, refreshToken: newRefreshToken } = createTokens(
-    user,
-    ACCESS_TOKEN_SECRET,
-    refreshSecret
-  )
-
-  return {
-    token: accessToken,
-    refreshToken: newRefreshToken,
-    user
-  }
-}
+  return { token, refreshToken };
+};
 
 // Return a generic message instead of divulging a valid email login
 const invalidCredentialsResponse = {
   ok: false,
   errors: [
     {
-      path: 'invalid-credentials',
-      message: 'Error! Invalid credentials.'
+      path: "invalid-credentials",
+      message: "Error! Invalid credentials."
     }
   ]
-}
+};
 
 export const tryLogin = async (email, password) => {
-  const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env
-  const user = await models.User.where({ email }).fetch()
-  if (!user) return invalidCredentialsResponse
+  const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+  const user = await models.User.where({ email }).fetch();
+  if (!user) return invalidCredentialsResponse;
 
-  const valid = await bcrypt.hash(password, user.get('passwordDigest'))
-  if (!valid) return invalidCredentialsResponse
+  console.log("user", user.attributes);
 
-  const refreshSecret = user.get('passwordDigest') + REFRESH_TOKEN_SECRET
-  const { accessToken, refreshToken } = createTokens(user, ACCESS_TOKEN_SECRET, refreshSecret)
+  const valid = await bcrypt.compare(password, user.get("passwordDigest"));
+  if (!valid) return invalidCredentialsResponse;
+
+  console.log("valid?", valid);
+
+  const refreshSecret = user.get("passwordDigest") + REFRESH_TOKEN_SECRET;
+  const { token, refreshToken } = createTokens(
+    user,
+    ACCESS_TOKEN_SECRET,
+    refreshSecret
+  );
 
   return {
     ok: true,
-    token: accessToken,
+    token: token,
     refreshToken: refreshToken
-  }
-}
+  };
+};
