@@ -1,32 +1,15 @@
-import React, { useContext } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
-import { AuthContext } from "utils/auth";
-
-const INVALIDATE_TOKENS_MUTATION = gql`
-  mutation logout {
-    invalidateTokens
-  }
-`;
+import React from "react";
+import useLogout from "utils/hooks/useLogout";
 
 function Home() {
-  const [invalidateTokens, { client }] = useMutation(
-    INVALIDATE_TOKENS_MUTATION
-  );
-  const { logout } = useContext(AuthContext);
-
-  const performLogout = async () => {
-    await invalidateTokens();
-    logout();
-    client.resetStore();
-  };
+  const logout = useLogout();
 
   return (
     <div>
       Home
       <ul>
         <li>
-          <span onClick={performLogout}>Logout</span>
+          <span onClick={() => logout()}>Logout</span>
         </li>
       </ul>
     </div>
