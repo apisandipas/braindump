@@ -6,12 +6,12 @@
   "author": "Bryan Paronto <bparonto@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "docker-up:dev": "docker-compose -f docker/docker-compose.dev.yml up",
+    "docker-up:dev": "docker-compose -f docker/docker-compose.dev.yml up --remove-orphans",
     "docker-up:prod": "docker-compose -f docker/docker-compose.prod.yml up -d --build",
     "docker-down:dev": "docker-compose -f docker/docker-compose.dev.yml down",
     "docker-down:prod": "docker-compose -f docker/docker-compose.prod.yml down",
-    "db:migrate": "docker exec -it noteapp-server-dev knex migrate:latest",
-    "db:migrate:rollback": "docker exec -it noteapp-server-dev knex migrate:rollback",
-    "db:seed": "docker exec -it noteapp-server-dev knex seed:run"
+    "db:migrate": "docker exec -it noteapp-server knex migrate:latest",
+    "db:migrate:rollback": "docker exec -it noteapp-server knex migrate:rollback",
+    "db:seed": "docker exec -it noteapp-server knex seed:run"
   }
 }

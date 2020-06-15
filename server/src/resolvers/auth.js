@@ -46,7 +46,19 @@ export default {
       }
     },
     login: async (_, { email, password }) => tryLogin(email, password),
-    forgotPassword: async (_, { email }, { models }) => {
+    invalidateTokens: async (parent, args, { req, models }) => {
+      if (!req.user) {
+        return false
+      }
+
+      const user = models.User.where({ id: req.user }).fetch()
+      if (!user) {
+        return false
+      }
+
+      user.set('invalidationCount', user.get('invalidationCount') + 1).save()
+    },
+    forgotPassword: async (parent, { email }, { models }) => {
       try {
         const user = await models.User.where({ email }).fetch()
         // TODO Consider removing this message or not passing it client at least

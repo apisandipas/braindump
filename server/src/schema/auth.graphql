@@ -21,6 +21,7 @@ type Mutation {
     password: String!
   ): UserMutationResponse!
   login(email: String!, password: String!): LoginResponse
+  invalidateTokens: Boolean!
   forgotPassword(email: String!): PasswordResetResponse
   resetPassword(
     token: String!

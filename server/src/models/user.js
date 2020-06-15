@@ -21,6 +21,7 @@ const User = ModelBase.extend({
       .email()
       .required(),
     role: Joi.string(),
+    invalidationCount: Joi.number(),
     createdAt: Joi.date().required(),
     updatedAt: Joi.date()
   }

@@ -2,7 +2,9 @@ import { sign, decode, verify } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import models from 'models'
 
-export const createTokens = (user, ACCESS_TOKEN_SECRET, refreshSecret) => {
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env
+
+export const createTokens = user => {
   const accessToken = sign(
     {
       user: {
@@ -18,9 +20,18 @@ export const createTokens = (user, ACCESS_TOKEN_SECRET, refreshSecret) => {
     }
   )
 
-  const refreshToken = sign({ user: { id: user.get('id') } }, refreshSecret, {
-    expiresIn: '7d'
-  })
+  const refreshToken = sign(
+    {
+      user: {
+        id: user.get('id'),
+        invalidationCount: user.get('invalidationCount')
+      }
+    },
+    REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: '7d'
+    }
+  )
 
   return { accessToken, refreshToken }
 }

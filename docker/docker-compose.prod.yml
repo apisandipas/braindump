@@ -1,23 +1,23 @@
 version: "3.7"
 
 services:
-  noteapp-client-prod:
-    container_name: noteapp-client-prod
+  noteapp-client:
+    container_name: noteapp-client
     build:
       context: ../
       dockerfile: docker/client/Dockerfile.prod
     ports:
       - "80:80"
-  noteapp-server-prod:
-    container_name: noteapp-server-prod
+  noteapp-server:
+    container_name: noteapp-server
     build:
       context: ../
       dockerfile: docker/server/Dockerfile.prod
     ports:
       - "5001:5000"
-  noteapp-db-prod:
+  noteapp-db:
     image: postgres:9.6.17
-    container_name: noteapp-db-prod
+    container_name: noteapp-db
     restart: always
     ports:
       - "5432:5432"
