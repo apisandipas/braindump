@@ -11,9 +11,9 @@ ENV PATH /app/node_modules/.bin:$PATH
 RUN apk --no-cache add --virtual builds-deps build-base python git
 
 # install and cache app dependencies
-COPY server/package.json /app/package.json
-RUN npm install -g knex@0.20.10
-RUN npm install
+# COPY server/package.json /app/package.json
+# RUN npm install -g knex@0.20.10
+# RUN npm install
 COPY ./server /app
 
 # start app

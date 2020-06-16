@@ -1,11 +1,14 @@
 import { promisify } from "util";
 import crypto from "crypto";
-import { tryLogin } from "services/auth";
+import { UserInputError, ApolloError } from "apollo-server-express";
+import { tryLogin, createTokens } from "services/auth";
 import { formatErrors } from "services/errors";
 import mailer from "services/mailer";
+import { SuccessResponse } from "utils/responses";
 
 const TWENTY_FOUR_HOURS = 60 * 60 * 24 * 1000;
 const APP_DOMAIN = process.env.APP_DOMAIN || "localhost";
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 export default {
   Query: {
@@ -23,29 +26,17 @@ export default {
           { require: false }
         );
         if (existingUser) {
-          return {
-            ok: false,
-            errors: [
-              {
-                path: "email",
-                message: `Error! Your must pick a unique email.`
-              }
-            ]
-          };
+          throw new UserInputError("Please pick a unique email.");
         }
         const user = await models.User.create(args);
         if (user) {
-          return {
-            ok: true,
-            user: user.toJSON()
-          };
+          return new SuccessResponse(createTokens(user));
         }
       } catch (err) {
-        console.log("register err", JSON.stringify(err));
-        return {
-          ok: false,
+        console.error(err);
+        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
           errors: formatErrors(err)
-        };
+        });
       }
     },
     login: async (_, { email, password }) => tryLogin(email, password),
@@ -82,8 +73,8 @@ export default {
           template: "forgot-password",
           subject: "Password help has arrived!",
           context: {
-            url: `https://${APP_DOMAIN}/reset-password?token=${token}`,
-            name: user.get("username")
+            url: `${CLIENT_URL}/reset-password?token=${token}`,
+            name: user.get("email")
           }
         };
 
@@ -123,7 +114,7 @@ export default {
           template: "password-reset",
           subject: "Password Reset Confirmation",
           context: {
-            name: user.get("username")
+            name: user.get("email")
           }
         };
         await mailer.sendMail(emailData);

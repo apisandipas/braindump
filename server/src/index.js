@@ -29,15 +29,13 @@ app.use(async (req, res, next) => {
     return next();
   }
 
-  //console.log(req.headers);
-
   try {
     const { user } = verify(accessToken, ACCESS_TOKEN_SECRET);
 
     req.user = user.id;
     return next();
   } catch (err) {
-    console.error(err);
+    //console.error(err);
   }
 
   if (!refreshToken) {
@@ -59,7 +57,6 @@ app.use(async (req, res, next) => {
   }
 
   const newTokens = createTokens(user);
-  console.log("newTokens", newTokens);
   if (newTokens.token && newTokens.refreshToken) {
     res.set("Access-Control-Expose-Headers", "x-token, x-refresh-token");
     res.set("x-token", newTokens.token);

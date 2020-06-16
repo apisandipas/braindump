@@ -1,6 +1,5 @@
 type User {
   id: ID!
-  username: String!
   email: String!
   notes: [Note!]
   notebooks: [Notebook!]

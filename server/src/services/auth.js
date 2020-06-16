@@ -1,7 +1,8 @@
 import { sign } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { AuthenticationError } from "apollo-server-express";
 import models from "models";
-
+import { SuccessResponse } from "utils/responses";
 const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 export const createTokens = user => {
@@ -36,39 +37,14 @@ export const createTokens = user => {
   return { token, refreshToken };
 };
 
-// Return a generic message instead of divulging a valid email login
-const invalidCredentialsResponse = {
-  ok: false,
-  errors: [
-    {
-      path: "invalid-credentials",
-      message: "Error! Invalid credentials."
-    }
-  ]
-};
-
 export const tryLogin = async (email, password) => {
-  const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+  const INVALID_CREDENTIALS_MSG = "Invalid credentials!";
   const user = await models.User.where({ email }).fetch();
-  if (!user) return invalidCredentialsResponse;
 
-  console.log("user", user.attributes);
+  if (!user) throw new AuthenticationError(INVALID_CREDENTIALS_MSG);
 
   const valid = await bcrypt.compare(password, user.get("passwordDigest"));
-  if (!valid) return invalidCredentialsResponse;
+  if (!valid) throw new AuthenticationError(INVALID_CREDENTIALS_MSG);
 
-  console.log("valid?", valid);
-
-  const refreshSecret = user.get("passwordDigest") + REFRESH_TOKEN_SECRET;
-  const { token, refreshToken } = createTokens(
-    user,
-    ACCESS_TOKEN_SECRET,
-    refreshSecret
-  );
-
-  return {
-    ok: true,
-    token: token,
-    refreshToken: refreshToken
-  };
+  return new SuccessResponse(createTokens(user));
 };

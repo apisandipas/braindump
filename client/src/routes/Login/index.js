@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import {
   Alert,
+  H1,
   H5,
   Div,
   Button,
@@ -13,20 +14,9 @@ import {
   FormGroup,
   FormControl
 } from "@apisandipas/bssckit";
-import styled from "styled-components";
 import { setTokens, AuthContext } from "utils/auth";
-import { isValidEmail } from "../../utils/validation";
-
-const AuthFormWrapper = styled.div`
-  margin-top: 10rem;
-  background: #fff;
-  padding: 1rem;
-  box-shadow: 5px 5px 5px var(--nord5);
-
-  label {
-    font-size: 15px;
-  }
-`;
+import { isValidEmail } from "utils/validation";
+import { AuthFormWrapper } from "components/AuthForm";
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($email: String!, $password: String!) {
@@ -34,43 +24,59 @@ const LOGIN_MUTATION = gql`
       ok
       token
       refreshToken
-      errors {
-        path
-        message
-      }
     }
   }
 `;
 
 function Login() {
   const history = useHistory();
-  const [formError, setFormError] = useState("");
+  const location = useLocation();
+  const [formErrors, setFormErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading }] = useMutation(LOGIN_MUTATION);
   const { isAuthenticated } = useContext(AuthContext);
 
   const onSubmit = async event => {
     event.preventDefault();
 
+    const errors = [];
+
     if (!email || !isValidEmail(email)) {
-      setFormError("Please enter an email!");
-      return;
+      errors.push("Please enter a valid email!");
     }
 
     if (!password) {
-      setFormError("Please enter a password!");
+      errors.push("Please enter a password!");
+    }
+
+    if (errors.length > 0) {
+      setFormErrors(errors);
       return;
     }
 
-    const response = await login({ variables: { email, password } });
-    const { ok, token, refreshToken, errors } = response.data.login;
+    let response;
 
-    if (ok) {
-      setTokens(token, refreshToken);
-      history.push("/");
-    } else {
-      console.error("error", errors);
+    try {
+      setFormErrors([]);
+      response = await login({ variables: { email, password } });
+
+      const loginResponse = response?.data?.login;
+
+      if (loginResponse) {
+        var { ok, token, refreshToken } = loginResponse;
+
+        if (ok) {
+          setTokens(token, refreshToken);
+          const { from } = location.state || { from: { pathname: "/" } };
+          history.push(from);
+        }
+      }
+    } catch (error) {
+      const msg = error.message.replace("GraphQL error:", "");
+      setFormErrors([msg]);
+      setEmail("");
+      setPassword("");
     }
   };
 
@@ -84,29 +90,36 @@ function Login() {
         <Row>
           <Col xs={12} lg={4} lgOffset={4}>
             <AuthFormWrapper>
-              <H5>Please login to continue </H5>
+              <H1 textCenter>🧠</H1> <H5>Please login to continue </H5>
               <form onSubmit={onSubmit}>
                 <FormGroup>
-                  <label>Email:</label>
+                  <label htmlFor="email">Email:</label>
                   <FormControl
+                    id="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    type="email"
+                    type="text"
                   />
                 </FormGroup>
                 <FormGroup>
-                  <label>Password:</label>
+                  <label htmlFor="password">Password:</label>
                   <FormControl
+                    id="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     type="password"
                   />
                 </FormGroup>
-                <Button block primary disabled={loading}>
+                <Button block primary mb4 disabled={loading}>
                   {loading ? "..." : "Login"}
                 </Button>
 
-                {formError && <Alert danger>{formError}</Alert>}
+                {formErrors.length > 0 &&
+                  formErrors.map(message => (
+                    <Alert danger mb1 key={message}>
+                      {message}
+                    </Alert>
+                  ))}
               </form>
             </AuthFormWrapper>
             <Div textCenter mt4>

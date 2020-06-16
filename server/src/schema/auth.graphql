@@ -2,7 +2,6 @@ type LoginResponse {
   ok: Boolean!
   token: String
   refreshToken: String
-  errors: [Error!]
 }
 
 type PasswordResetResponse {
@@ -15,11 +14,7 @@ type Query {
 }
 
 type Mutation {
-  register(
-    username: String!
-    email: String!
-    password: String!
-  ): UserMutationResponse!
+  register(email: String!, password: String!): LoginResponse
   login(email: String!, password: String!): LoginResponse
   invalidateTokens: Boolean!
   forgotPassword(email: String!): PasswordResetResponse
