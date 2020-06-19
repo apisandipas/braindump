@@ -55,11 +55,9 @@ function Login() {
       return;
     }
 
-    let response;
-
     try {
       setFormErrors([]);
-      response = await login({ variables: { email, password } });
+      const response = await login({ variables: { email, password } });
 
       const loginResponse = response?.data?.login;
 
@@ -88,7 +86,7 @@ function Login() {
     <div>
       <Container>
         <Row>
-          <Col xs={12} lg={4} lgOffset={4}>
+          <Col xs={12} md={6} mdOffset={3} lg={4} lgOffset={4}>
             <AuthFormWrapper>
               <H1 textCenter>🧠</H1> <H5>Please login to continue </H5>
               <form onSubmit={onSubmit}>
@@ -123,7 +121,8 @@ function Login() {
               </form>
             </AuthFormWrapper>
             <Div textCenter mt4>
-              <Link to="/register">Register</Link>
+              <Link to="/register">Register</Link> | {"  "}
+              <Link to="/forgot-password">Reset Password</Link>
             </Div>
           </Col>
         </Row>

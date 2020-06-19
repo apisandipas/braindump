@@ -13,6 +13,7 @@ const User = ModelBase.extend({
   },
 
   validate: {
+    username: Joi.string().allow(null),
     passwordDigest: Joi.string(),
     passwordResetToken: Joi.any().allow(null),
     passwordResetExpires: Joi.any().allow(null),

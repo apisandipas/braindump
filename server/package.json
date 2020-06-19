@@ -33,7 +33,6 @@
     "db-errors": "^0.2.3",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "global": "^4.4.0",
     "graphql": "^14.4.2",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
@@ -43,7 +42,8 @@
     "nodemailer": "^6.3.1",
     "nodemailer-express-handlebars": "^3.1.0",
     "nodemailer-mailgun-transport": "^1.4.0",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "uuid": "^8.1.0"
   },
   "scripts": {
     "start": "DEBUG=knex:query NODE_PATH=src/ nodemon --exec babel-node src/index.js",

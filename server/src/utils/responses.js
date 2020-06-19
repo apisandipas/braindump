@@ -18,6 +18,12 @@ export class SuccessResponse extends BaseResponse {
   }
 }
 
+export class ForiddenResponse extends BaseResponse {
+  constructor(message = "Forbidden") {
+    super(false, 403, message, []);
+  }
+}
+
 export class NotFoundResponse extends BaseResponse {
   constructor(message) {
     super(false, 404, message, []);

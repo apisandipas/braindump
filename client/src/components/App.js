@@ -4,10 +4,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { BaseCss, BSThemeProvider } from "@apisandipas/bssckit";
 import theme, { GlobalStyle } from "../theme";
 import client from "../client";
-import { PrivateRoute, AuthContext, AuthProvider } from "utils/auth";
+import { PrivateRoute, AuthProvider } from "utils/auth";
 import Home from "routes/Home";
 import Login from "routes/Login";
 import Register from "routes/Register";
+import ForgotPassword from "routes/ForgotPassword";
+import ResetPassword from "routes/ResetPassword";
 
 function App() {
   return (
@@ -19,13 +21,10 @@ function App() {
             <GlobalStyle />
             <Switch>
               <PrivateRoute path="/" exact component={Home} />
-              <PrivateRoute
-                path="/other-private-route"
-                exact
-                component={Home}
-              />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
+              <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/reset-password" component={ResetPassword} />
             </Switch>
           </BSThemeProvider>
         </ApolloProvider>

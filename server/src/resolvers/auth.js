@@ -1,5 +1,4 @@
-import { promisify } from "util";
-import crypto from "crypto";
+import { v4 as uuid } from "uuid";
 import { UserInputError, ApolloError } from "apollo-server-express";
 import { tryLogin, createTokens } from "services/auth";
 import { formatErrors } from "services/errors";
@@ -60,9 +59,7 @@ export default {
         // TODO Consider removing this message or not passing it client at least
         if (!user) throw new Error("User not found for this email address");
 
-        const randomBytes = promisify(crypto.randomBytes);
-        const buffer = await randomBytes(20);
-        const token = buffer.toString("hex");
+        const token = uuid();
         user.set("passwordResetToken", token);
         user.set("passwordResetExpires", Date.now() + TWENTY_FOUR_HOURS);
         await user.save();
@@ -80,34 +77,29 @@ export default {
 
         await mailer.sendMail(emailData);
 
-        return {
-          ok: true
-        };
+        return new SuccessResponse();
       } catch (err) {
-        console.log("err", err);
-        return {
-          ok: false,
-          error: formatErrors(err)
-        };
+        console.error("err", err);
+        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
+          errors: formatErrors(err)
+        });
       }
     },
-    resetPassword: async (
-      _,
-      { token, password, passwordConfirm },
-      { models }
-    ) => {
+    resetPassword: async (_, { token, password }, { models }) => {
       try {
         const user = await models.User.where({ password_reset_token: token })
           .where("password_reset_expires", ">", Date.now())
           .fetch();
-        if (!user) throw new Error("Invalid password reset token!");
-        if (password !== passwordConfirm) {
-          throw new Error("Passwords don't match!");
+
+        if (!user) {
+          throw new UserInputError("Invalid password reset token!");
         }
+
         user.set("password", password);
         user.set("passwordResetToken", null);
         user.set("passwordResetExpires", null);
         await user.save();
+
         const emailData = {
           to: user.get("email"),
           from: `no-reply@${APP_DOMAIN}`,
@@ -117,16 +109,14 @@ export default {
             name: user.get("email")
           }
         };
+
         await mailer.sendMail(emailData);
-        return {
-          ok: true
-        };
+
+        return new SuccessResponse();
       } catch (err) {
-        console.log("err", err);
-        return {
-          ok: false,
+        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
           errors: formatErrors(err)
-        };
+        });
       }
     }
   }

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import {
@@ -31,6 +31,7 @@ const REGISTER_MUTATION = gql`
 
 function Register() {
   const history = useHistory();
+  const location = useLocation();
   const [formErrors, setFormErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,7 +99,7 @@ function Register() {
     <div>
       <Container>
         <Row>
-          <Col xs={12} lg={4} lgOffset={4}>
+          <Col xs={12} md={6} mdOffset={3} lg={4} lgOffset={4}>
             <AuthFormWrapper>
               <H1 textCenter>🧠</H1> <H5>Sign up to join the action! </H5>
               <form onSubmit={onSubmit}>
@@ -144,7 +145,8 @@ function Register() {
               </form>
             </AuthFormWrapper>
             <Div textCenter mt4>
-              <Link to="/login">Have an account? Login here.</Link>
+              <Link to="/login">Have an account? Login here.</Link> |{" "}
+              <Link to="/forgot-password">Reset Password</Link>
             </Div>
           </Col>
         </Row>
