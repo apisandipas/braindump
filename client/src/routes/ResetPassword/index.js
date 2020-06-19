@@ -37,7 +37,6 @@ function ResetPassword() {
   const [resetPassword, { loading }] = useMutation(RESET_PASSWORD_MUTATION);
 
   const resetToken = qs.parse(location.search).token;
-  console.log(resetToken);
 
   if (!resetToken) {
     return (
