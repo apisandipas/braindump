@@ -21,6 +21,17 @@ function App() {
             <GlobalStyle />
             <Switch>
               <PrivateRoute path="/" exact component={Home} />
+              <PrivateRoute
+                path="/notebook/:notebookId"
+                exact
+                component={Home}
+              />
+              <PrivateRoute
+                path="/notebook/:notebookId/note/:noteId"
+                exact
+                component={Home}
+              />
+              <PrivateRoute path="/note/:noteId" exact component={Home} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
               <Route path="/forgot-password" component={ForgotPassword} />

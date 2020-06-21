@@ -21,8 +21,8 @@ const nord = {
 
 const theme = {
   palette: {
-    primary: nord.nord10,
-    primaryDarker: nord.nord10,
+    primary: nord.nord1,
+    primaryDarker: nord.nord1,
     ...nord
   }
 };
@@ -48,9 +48,13 @@ export const GlobalStyle = createGlobalStyle`
     --nord14: ${theme.palette.nord14};
     --nord15: ${theme.palette.nord15};
 
-    --body-background: var(--nord6);
+    --body-background: var(--nord5);
     --body-color: var(--nord0);
-    --link-color: var(--nord10);
+    --link-color: var(--nord1);
+  }
+
+  html, body {
+    height: 100vh;
   }
 
   body {
