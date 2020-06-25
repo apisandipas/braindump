@@ -6,8 +6,9 @@ type Notebook {
 
 type NotebookMutationResponse {
   ok: Boolean!
+  code: Int
+  message: String
   notebook: Notebook
-  errors: [Error!]
 }
 
 type Query {

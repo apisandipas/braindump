@@ -10,11 +10,13 @@ const Details = styled.div`
   padding: ${props => (props.open ? "0.5rem 0" : "0")};
 `;
 
-function SidebarAccordian({ title, items, path }) {
+function SidebarAccordian({ title, items, path, as: Component = Div }) {
   const [showDetails, toggleDetails] = useToggle(false);
   return (
     <>
-      <Div onClick={toggleDetails}>{title}</Div>
+      <Div onClick={toggleDetails}>
+        <Component to={path}>{title}</Component>
+      </Div>
       <Details open={showDetails}>
         <ul>
           {items.length > 0 &&

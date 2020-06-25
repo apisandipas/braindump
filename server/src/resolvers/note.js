@@ -1,85 +1,122 @@
-import { formatErrors } from 'services/errors'
-import { knex } from 'database'
+import { knex } from "database";
+import { UnauthorizedError, ApolloError } from "apollo-server-express";
+import { SuccessResponse } from "utils/responses";
 
 export default {
   Note: {
-    tags: async (parent, args, { models }) => {
+    tags: async (parent, args, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
       try {
         // TODO Refactor this when I figure out how to access the related tags directly
-        const tagIds = await knex('notes_tags')
-          .where('note_id', parent.id)
-          .map(i => i.tag_id)
-        const tags = await models.Tag.where('id', 'IN', tagIds).fetchAll()
-        return tags.toJSON()
+        const tagIds = await knex("notes_tags")
+          .where("note_id", parent.id)
+          .map(i => i.tag_id);
+        const tags = await models.Tag.where("id", "IN", tagIds)
+          .where({ user_id: req.user })
+          .fetchAll();
+        if (tags) {
+          return tags.toJSON();
+        }
       } catch (err) {
-        return new Error(err.message)
+        throw new ApolloError(err.message);
       }
     }
   },
   Query: {
-    getNote: async (parent, { id }, { models }) => {
+    getNote: async (parent, { id }, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
       try {
-        const note = await models.Note.findById(id)
-        return note.toJSON()
+        const note = await models.Note.where({
+          user_id: req.user
+        }).findById(id);
+        return note.toJSON();
       } catch (err) {
-        return new Error(err.message)
+        throw new ApolloError(err.message);
       }
     },
     allNotes: async (parent, args, { models, req }) => {
       if (!req.user) {
-        return new Error('Unauthorized!')
+        throw new UnauthorizedError("Unauthorized!");
       }
 
       try {
-        const notes = await models.Note.fetchAll()
-        return notes.toJSON()
+        const notes = await models.Note.where({
+          user_id: req.user
+        }).fetchAll();
+        return notes.toJSON();
       } catch (err) {
-        return new Error(err.message)
+        throw new ApolloError(err.message);
+      }
+    },
+    notesByNotebook: async (parent, { notebookId }, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
+
+      try {
+        const notes = await models.Note.where({
+          notebook_id: notebookId,
+          user_id: req.user
+        }).fetchAll();
+
+        return new SuccessResponse({ notes: notes.toJSON() });
+      } catch (err) {
+        throw new ApolloError(err.message);
       }
     }
   },
   Mutation: {
-    createNote: async (parent, { values }, { models }) => {
+    createNote: async (parent, { values }, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized");
+      }
       try {
-        const note = await models.Note.create(values)
+        const note = await models.Note.create({ ...values, user_id: req.user });
         if (note) {
-          return {
-            ok: true,
+          return new SuccessResponse({
             note: note.toJSON()
-          }
+          });
         }
       } catch (err) {
-        console.log('createNote err', err)
-        return {
-          ok: false,
-          errors: formatErrors(err)
-        }
+        throw new ApolloError(err.message);
       }
     },
-    updateNote: async (parent, { id, values }, { models }) => {
+    updateNote: async (parent, { id, values }, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
       try {
-        const note = await models.Note.update(values, { id })
+        const note = await models.Note.update(values, {
+          id,
+          user_id: req.user
+        });
         if (note) {
-          return {
-            ok: true,
+          return new SuccessResponse({
             note: note.toJSON()
-          }
+          });
         }
       } catch (err) {
-        console.log('updateNote err', err)
-        return {
-          ok: false,
-          errors: formatErrors(err)
-        }
+        throw new ApolloError(err.message);
       }
     },
-    deleteNote: async (parent, args, { models }) => {
+    deleteNote: async (parent, args, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
       try {
-        await models.Note.destroy(args)
-        return true
+        const note = await models.Note.where({ user_id: req.user }).find();
+        if (note) {
+          await models.Note.destroy(args);
+          return true;
+        }
+        return false;
       } catch (err) {
-        return false
+        return false;
       }
     }
   }
-}
+};

@@ -1,13 +1,13 @@
 type Tag {
   id: ID!
   name: String
-  notes: [Note!]
 }
 
 type TagMutationResponse {
   ok: Boolean!
+  code: Int
+  message: String
   tag: Tag
-  errors: [Error!]
 }
 
 type Query {

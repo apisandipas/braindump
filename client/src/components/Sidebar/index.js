@@ -42,8 +42,6 @@ function Sidebar({ tags, notebooks }) {
     localStorage.setItem(SIDEBAR_EXPANDED_OPTION, isSidebarExpanded);
   }, [isSidebarExpanded]);
 
-  const [showDetails, toggleDetails] = useToggle(false);
-
   return (
     <SidebarWrapper expanded={isSidebarExpanded}>
       <SidebarContent>
@@ -51,6 +49,7 @@ function Sidebar({ tags, notebooks }) {
         <NewNoteCTA />
         <Link to="/">All Notes</Link>
         <SidebarAccordian
+          as={Link}
           title="Notebooks"
           items={notebooks}
           path={"/notebook/"}

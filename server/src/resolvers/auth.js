@@ -1,7 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { UserInputError, ApolloError } from "apollo-server-express";
 import { tryLogin, createTokens } from "services/auth";
-import { formatErrors } from "services/errors";
 import mailer from "services/mailer";
 import { SuccessResponse } from "utils/responses";
 
@@ -10,13 +9,7 @@ const APP_DOMAIN = process.env.APP_DOMAIN || "localhost";
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:3000";
 
 export default {
-  Query: {
-    me: async (_, __, { req, models }) => {
-      if (!req.user || !req.user.id) return null;
-      const user = await models.User.where({ id: req.user.id }).fetch();
-      return user.toJSON();
-    }
-  },
+  Query: {},
   Mutation: {
     register: async (parent, args, { models }) => {
       try {
@@ -32,10 +25,7 @@ export default {
           return new SuccessResponse(createTokens(user));
         }
       } catch (err) {
-        console.error(err);
-        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
-          errors: formatErrors(err)
-        });
+        throw new ApolloError(err.message);
       }
     },
     login: async (_, { email, password }) => tryLogin(email, password),
@@ -80,9 +70,7 @@ export default {
         return new SuccessResponse();
       } catch (err) {
         console.error("err", err);
-        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
-          errors: formatErrors(err)
-        });
+        throw new ApolloError(err.message);
       }
     },
     resetPassword: async (_, { token, password }, { models }) => {
@@ -114,9 +102,7 @@ export default {
 
         return new SuccessResponse();
       } catch (err) {
-        throw new ApolloError(err.message, "UNKNOWN_ERROR", {
-          errors: formatErrors(err)
-        });
+        throw new ApolloError(err.message);
       }
     }
   }

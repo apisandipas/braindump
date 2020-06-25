@@ -21,6 +21,7 @@ function App() {
             <GlobalStyle />
             <Switch>
               <PrivateRoute path="/" exact component={Home} />
+              <PrivateRoute path="/notebook" exact component={Home} />
               <PrivateRoute
                 path="/notebook/:notebookId"
                 exact

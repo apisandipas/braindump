@@ -2,19 +2,30 @@ type Note {
   id: ID!
   title: String!
   body: String!
-  updatedAt: String!
+  updatedAt: String
   tags: [Tag!]
+  user: User
+  notebookId: ID!
 }
 
 type NoteMutationResponse {
   ok: Boolean!
+  code: Int
+  messge: String
   note: Note
-  errors: [Error!]
+}
+
+type NoteQueryResponse {
+  ok: Boolean!
+  code: Int
+  message: String
+  notes: [Note]!
 }
 
 type Query {
   allNotes: [Note]!
   getNote(id: ID!): Note!
+  notesByNotebook(notebookId: ID): NoteQueryResponse!
 }
 
 type Mutation {
