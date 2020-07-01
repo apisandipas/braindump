@@ -1,6 +1,11 @@
 import React from "react";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 import { BaseCss, BSThemeProvider } from "@apisandipas/bssckit";
 import theme, { GlobalStyle } from "../theme";
 import client from "../client";
@@ -20,10 +25,16 @@ function App() {
             <BaseCss />
             <GlobalStyle />
             <Switch>
-              <PrivateRoute path="/" exact component={Home} />
+              <Redirect from="/" to="/notebook/all" exact />
               <PrivateRoute path="/notebook" exact component={Home} />
               <PrivateRoute
                 path="/notebook/:notebookId"
+                exact
+                component={Home}
+              />
+              <PrivateRoute path="/notebook/all" exact component={Home} />
+              <PrivateRoute
+                path="/notebook/all/note/:noteId"
                 exact
                 component={Home}
               />

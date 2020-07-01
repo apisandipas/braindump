@@ -31,8 +31,9 @@ export default {
       }
       try {
         const note = await models.Note.where({
+          id,
           user_id: req.user
-        }).findById(id);
+        }).fetch();
         return note.toJSON();
       } catch (err) {
         throw new ApolloError(err.message);
@@ -63,7 +64,14 @@ export default {
           user_id: req.user
         }).fetchAll();
 
-        return new SuccessResponse({ notes: notes.toJSON() });
+        const notebook = await models.Notebook.where({
+          id: notebookId
+        }).fetch();
+
+        return new SuccessResponse({
+          notes: notes.toJSON(),
+          notebook: notebook.toJSON()
+        });
       } catch (err) {
         throw new ApolloError(err.message);
       }

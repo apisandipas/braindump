@@ -68,7 +68,11 @@ function ForgotPassword() {
         <Row>
           <Col xs={12} md={6} mdOffset={3} lg={4} lgOffset={4}>
             <AuthFormWrapper>
-              <H1 textCenter>🧠</H1>
+              <H1 textCenter>
+                <span role="img" aria-label="Braindump">
+                  🧠
+                </span>
+              </H1>
               <H5>Something slip your mind?</H5>
               <form onSubmit={onSubmit}>
                 <FormGroup>

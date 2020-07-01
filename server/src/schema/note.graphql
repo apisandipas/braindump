@@ -20,6 +20,7 @@ type NoteQueryResponse {
   code: Int
   message: String
   notes: [Note]!
+  notebook: Notebook
 }
 
 type Query {

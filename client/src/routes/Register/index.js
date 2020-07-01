@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import {
@@ -14,7 +14,6 @@ import {
   FormGroup,
   FormControl
 } from "@apisandipas/bssckit";
-import styled from "styled-components";
 import { setTokens, AuthContext } from "utils/auth";
 import { isValidEmail } from "utils/validation";
 import { AuthFormWrapper } from "components/AuthForm";
@@ -31,7 +30,6 @@ const REGISTER_MUTATION = gql`
 
 function Register() {
   const history = useHistory();
-  const location = useLocation();
   const [formErrors, setFormErrors] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,7 +99,12 @@ function Register() {
         <Row>
           <Col xs={12} md={6} mdOffset={3} lg={4} lgOffset={4}>
             <AuthFormWrapper>
-              <H1 textCenter>🧠</H1> <H5>Sign up to join the action! </H5>
+              <H1 textCenter>
+                <span role="img" aria-label="Braindump">
+                  🧠
+                </span>
+              </H1>
+              <H5>Sign up to join the action! </H5>
               <form onSubmit={onSubmit}>
                 <FormGroup>
                   <label htmlFor="email">Email:</label>

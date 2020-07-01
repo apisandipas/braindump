@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Button, Div } from "@apisandipas/bssckit";
-import useToggle from "utils/hooks/useToggle";
-import SidebarAccountMenu from "../SidebarAccountMenu";
-import NewNoteCTA from "../NewNoteCTA";
+import SidebarAccountMenu from "components/SidebarAccountMenu";
+import NewNoteCTA from "components/NewNoteCTA";
 import SidebarAccordian from "components/SidebarAccordian";
 
-const SidebarWrapper = styled.div`
+const SidebarWrapper = styled(Div)`
   width: ${props => (props.expanded ? "240px" : "60px")};
   background: var(--nord1);
   display: flex;
@@ -21,27 +20,16 @@ const SidebarWrapper = styled.div`
   }
 `;
 
-const SidebarContent = styled.div`
+const SidebarContent = styled(Div)`
   height: calc(100vh - 50px);
 `;
 
-const Details = styled.div`
-  max-height: ${props => (props.open ? "100%" : "0")};
-  overflow: hidden;
-  padding: ${props => (props.open ? "0.5rem 0" : "0")};
-`;
-
-const SIDEBAR_EXPANDED_OPTION = "noteapp-sidebar-expanded";
-
-function Sidebar({ tags, notebooks }) {
-  const [isSidebarExpanded, toggleSidebarExpanded] = useToggle(
-    localStorage.getItem(SIDEBAR_EXPANDED_OPTION) === "true"
-  );
-
-  useEffect(() => {
-    localStorage.setItem(SIDEBAR_EXPANDED_OPTION, isSidebarExpanded);
-  }, [isSidebarExpanded]);
-
+function Sidebar({
+  tags,
+  notebooks,
+  isSidebarExpanded,
+  toggleSidebarExpanded
+}) {
   return (
     <SidebarWrapper expanded={isSidebarExpanded}>
       <SidebarContent>

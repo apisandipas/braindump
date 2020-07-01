@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Div, Ul, Li } from "@apisandipas/bssckit";
+import { useHistory } from "react-router-dom";
+import { Div } from "@apisandipas/bssckit";
+import styled from "styled-components";
 import gql from "graphql-tag";
+import NoteListHeader from "components/NoteListHeader";
+import NoteListItems from "components/NoteListItems";
+
+const NoteListWrapper = styled(Div)`
+  width: 266px;
+  background: var(--nord4);
+`;
 
 const ALL_NOTES_QUERY = gql`
   query allNotes {
@@ -21,58 +30,79 @@ const SELECTED_NOTEBOOKED_NOTES_QUERY = gql`
         id
         title
         body
-        notebookId
+      }
+      notebook {
+        id
+        name
       }
     }
   }
 `;
 
 function NoteList({ isNotebookIndex, notebookId, noteId }) {
+  const history = useHistory();
+
   const { data: allNotesData } = useQuery(ALL_NOTES_QUERY, {
-    skip: notebookId
+    skip: notebookId && notebookId !== "all"
   });
-  console.log("allNotesData", allNotesData);
+
+  const allNotes = allNotesData?.allNotes;
+
+  useEffect(() => {
+    if (isNotebookIndex) {
+      return;
+    }
+    if ((!notebookId || notebookId === "all") && allNotes?.length) {
+      const firstNote = allNotes[0];
+      history.push(`/notebook/all/note/${firstNote.id}`);
+    }
+  }, [allNotesData, allNotes, history, isNotebookIndex, notebookId]);
 
   const { data: selectedNotebookData } = useQuery(
     SELECTED_NOTEBOOKED_NOTES_QUERY,
     {
-      skip: !notebookId,
+      skip: !notebookId || notebookId === "all",
       variables: { notebookId }
     }
   );
-  console.log("selectedNotebookData", selectedNotebookData);
+
+  const notes = selectedNotebookData?.notesByNotebook?.notes;
+
+  useEffect(() => {
+    // Forward to he first note in the notebook if no note id is supplied
+    if (notebookId && !noteId && notes?.length) {
+      const firstNote = notes[0];
+      history.push(`/notebook/${notebookId}/note/${firstNote.id}`);
+    }
+  }, [selectedNotebookData, history, notebookId, noteId, notes]);
+
   if (isNotebookIndex) {
-    return <Div>Notebooks Index</Div>;
-  } else if (!notebookId && !noteId) {
-    const allNotes = allNotesData?.allNotes;
+    return <NoteListWrapper>Notebooks Index</NoteListWrapper>;
+  } else if (!notebookId || notebookId === "all") {
     return (
-      <Div border borderError p4>
-        All Notes note List
-        <Ul>
-          {allNotes?.length &&
-            allNotes.length > 0 &&
-            allNotes.map((note, index) => {
-              return <Li key={note.title + index}>{note.title}</Li>;
-            })}
-        </Ul>
-      </Div>
+      <NoteListWrapper>
+        <NoteListHeader notesCount={allNotes?.length} />
+        <NoteListItems notes={allNotes} isAllNotes={true} />
+      </NoteListWrapper>
     );
   } else if (notebookId) {
     const selectedNotes = selectedNotebookData?.notesByNotebook?.notes;
+    const selectedNotebook = selectedNotebookData?.notesByNotebook?.notebook;
     return (
-      <Div border borderPrimary p4>
-        Selected Notesbooks: {notebookId} Notelist
-        <Ul>
-          {selectedNotes?.length &&
-            selectedNotes.length > 0 &&
-            selectedNotes.map((note, index) => {
-              return <Li key={note.title + index}>{note.title}</Li>;
-            })}
-        </Ul>
-      </Div>
+      <NoteListWrapper>
+        <NoteListHeader
+          notebookName={selectedNotebook?.name}
+          notesCount={selectedNotes?.length}
+        />
+        <NoteListItems
+          notes={selectedNotes}
+          isAllNotes={false}
+          notebookId={notebookId}
+        />
+      </NoteListWrapper>
     );
   } else {
-    return <Div />;
+    return null;
   }
 }
 

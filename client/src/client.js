@@ -51,9 +51,18 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
+const cache = new InMemoryCache({
+  cacheRedirects: {
+    Query: {
+      getNote: (parent, args, { getCacheKey }) =>
+        getCacheKey({ __typename: "Note", id: args.id })
+    }
+  }
+});
+
 const client = new ApolloClient({
   link: ApolloLink.from([authLink, errorLink, httpLink]),
-  cache: new InMemoryCache()
+  cache
 });
 
 export default client;
