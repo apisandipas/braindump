@@ -7,7 +7,8 @@ import {
   faPlusCircle,
   faBook,
   faStickyNote,
-  faTags
+  faTags,
+  faEllipsisV
 } from "@fortawesome/free-solid-svg-icons";
 import { ifProp } from "styled-tools";
 
@@ -47,3 +48,9 @@ export const NotebookIcon = styled(Icon).attrs({
 export const TagsIcon = styled(Icon).attrs({
   icon: faTags
 })``;
+
+export const KebobIcon = styled(Icon).attrs({
+  icon: faEllipsisV
+})`
+  margin: 0;
+`;

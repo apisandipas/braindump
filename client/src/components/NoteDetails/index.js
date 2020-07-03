@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { Div } from "@apisandipas/bssckit";
+import Editor from "components/Editor";
 
 const NoteDetailsWrapper = styled(Div)`
   width: calc(100% - 266px);
@@ -36,9 +37,7 @@ function NoteDetails({ isNotebookIndex, noteId }) {
 
   return (
     <NoteDetailsWrapper p4>
-      {noteId}
-      {note.title}
-      {note.body}
+      <Editor title={note.title} content={note.body} key={note.id} />
     </NoteDetailsWrapper>
   );
 }

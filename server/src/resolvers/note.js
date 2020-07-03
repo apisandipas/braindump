@@ -47,7 +47,9 @@ export default {
       try {
         const notes = await models.Note.where({
           user_id: req.user
-        }).fetchAll();
+        })
+          .orderBy("updated_at", "DESC")
+          .fetchAll();
         return notes.toJSON();
       } catch (err) {
         throw new ApolloError(err.message);
@@ -62,7 +64,9 @@ export default {
         const notes = await models.Note.where({
           notebook_id: notebookId,
           user_id: req.user
-        }).fetchAll();
+        })
+          .orderBy("updated_at", "DESC")
+          .fetchAll();
 
         const notebook = await models.Notebook.where({
           id: notebookId

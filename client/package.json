@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apisandipas/bssckit": "^0.0.16",
+    "@apisandipas/bssckit": "^0.0.18",
     "@apollo/react-hooks": "^3.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
@@ -17,6 +17,7 @@
     "apollo-link": "^1.2.14",
     "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
+    "friendly-time": "^1.1.1",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
     "jwt-decode": "^2.2.0",
@@ -27,6 +28,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.0",
+    "slate": "^0.58.3",
+    "slate-react": "^0.58.3",
     "styled-components": "^5.1.1",
     "styled-tools": "^1.7.1"
   },

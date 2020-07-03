@@ -18,6 +18,7 @@ const ALL_NOTES_QUERY = gql`
       title
       body
       id
+      updatedAt
     }
   }
 `;
