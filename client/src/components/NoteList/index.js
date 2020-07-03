@@ -53,6 +53,7 @@ function NoteList({ isNotebookIndex, notebookId, noteId }) {
       return;
     }
     if ((!notebookId || notebookId === "all") && allNotes?.length) {
+      console.log("redirecting....");
       const firstNote = allNotes[0];
       history.push(`/notebook/all/note/${firstNote.id}`);
     }

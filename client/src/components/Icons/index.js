@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faUserCircle,
-  faPlusCircle
+  faPlusCircle,
+  faBook,
+  faStickyNote,
+  faTags
 } from "@fortawesome/free-solid-svg-icons";
 import { ifProp } from "styled-tools";
 
@@ -31,4 +34,16 @@ export const AccountIcon = styled(Icon).attrs({
 export const NewIcon = styled(Icon).attrs({
   icon: faPlusCircle,
   title: "New"
+})``;
+
+export const NoteIcon = styled(Icon).attrs({
+  icon: faStickyNote
+})``;
+
+export const NotebookIcon = styled(Icon).attrs({
+  icon: faBook
+})``;
+
+export const TagsIcon = styled(Icon).attrs({
+  icon: faTags
 })``;

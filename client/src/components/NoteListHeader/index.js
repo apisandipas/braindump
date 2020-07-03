@@ -4,13 +4,20 @@ import { Div, H5 } from "@apisandipas/bssckit";
 import styled from "styled-components";
 
 const HeaderWrapper = styled(Div)`
-  color: var(--body-background);
-  background: var(--nord9);
+  color: var(--body-color);
+  background: var(--nord4);
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  h5 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 function NoteListHeader({ notebookName, notesCount }) {
   return (
-    <HeaderWrapper p6 borderBottom>
+    <HeaderWrapper p6>
       <H5>{notebookName}</H5>
       <Div>{notesCount} Notes </Div>
     </HeaderWrapper>

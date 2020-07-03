@@ -32,12 +32,6 @@ function App() {
                 exact
                 component={Home}
               />
-              <PrivateRoute path="/notebook/all" exact component={Home} />
-              <PrivateRoute
-                path="/notebook/all/note/:noteId"
-                exact
-                component={Home}
-              />
               <PrivateRoute
                 path="/notebook/:notebookId/note/:noteId"
                 exact

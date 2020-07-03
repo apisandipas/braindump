@@ -61,6 +61,8 @@ function Home() {
   return (
     <AppWrapper isSidebarExpanded={isSidebarExpanded}>
       <Sidebar
+        isNotebookIndex={isNotebookIndex}
+        notebookId={notebookId}
         tags={allTags}
         notebooks={allNotebooks}
         isSidebarExpanded={isSidebarExpanded}

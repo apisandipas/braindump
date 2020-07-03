@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@apisandipas/bssckit@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@apisandipas/bssckit/-/bssckit-0.0.14.tgz#1974c26d766f7d9b90e3f803e39ef14d23ce37e3"
-  integrity sha512-USKOlaoG5jQkkpuIeSq64REsGJSWBx+68dwpmMuU6xqn94zMdQxPitBuZNPe+KZaHZzyyUkqd9O1p+Q6jPZqvA==
+"@apisandipas/bssckit@^0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@apisandipas/bssckit/-/bssckit-0.0.16.tgz#717303ec25af5aec8bde345d9429657875321e1f"
+  integrity sha512-yEqhz/dTwJtUc6gbDDdp49DLI98Yp/q/cr/uEwfqupjy24t4hon8/KkdOJIktQWyd/hOuHzyCDnMAmOyc4MrYA==
   dependencies:
     classnames "^2.2.6"
     lodash.merge "^4.6.2"

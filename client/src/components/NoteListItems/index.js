@@ -15,9 +15,15 @@ const NoteItem = styled(Li)`
     color: var(--body-color);
     text-decoration: none;
     display: block;
-    padding: 1rem 1.5rem;
+    > div {
+      padding: 1rem 2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
-  border-bottom: 1px solid var(--nord3);
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid ${props => (props.selected ? "transparent" : "#ccc;")};
   background: ${props =>
     props.selected ? "var(--body-background)" : "transparent"};
 `;
