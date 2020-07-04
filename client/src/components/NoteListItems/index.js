@@ -8,7 +8,7 @@ import { Div, Ul, Li } from "@apisandipas/bssckit";
 const NoteListWrapper = styled(Ul)`
   padding-left: 0;
   list-style-type: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: calc(100vh - 102px);
 `;
 

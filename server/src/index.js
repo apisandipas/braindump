@@ -35,7 +35,7 @@ app.use(async (req, res, next) => {
     req.user = user.id;
     return next();
   } catch (err) {
-    //console.error(err);
+    console.error("token errors", err);
   }
 
   if (!refreshToken) {
@@ -47,7 +47,7 @@ app.use(async (req, res, next) => {
   try {
     data = verify(refreshToken, REFRESH_TOKEN_SECRET);
   } catch (err) {
-    console.error(err);
+    console.error("refresh token error", err);
     return next();
   }
 

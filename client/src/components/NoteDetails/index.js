@@ -36,7 +36,7 @@ function NoteDetails({ isNotebookIndex, noteId }) {
   }
 
   return (
-    <NoteDetailsWrapper p4>
+    <NoteDetailsWrapper>
       <Editor title={note.title} content={note.body} key={note.id} />
     </NoteDetailsWrapper>
   );

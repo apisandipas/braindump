@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { createEditor } from "slate";
+import { withHistory } from "slate-history";
 import { Slate, Editable, withReact } from "slate-react";
 import { FormControl, Div, Button } from "@apisandipas/bssckit";
 import styled from "styled-components";
 import NoteMenu from "components/NoteMenu";
+import { withMarkdownShortcuts } from "utils/markdown";
 
 const TitleInput = styled(FormControl).attrs({
   plainText: true,
@@ -11,7 +13,6 @@ const TitleInput = styled(FormControl).attrs({
 })`
   font-size: 18px;
   border: 1px solid var(--nord4) !important;
-  margin-bottom: 1rem;
   // Make input full width, minus the width of buttons and margins
   width: calc(100% - 1rem - 100px - 1rem - 38px);
   &:focus {
@@ -25,8 +26,50 @@ const SaveButton = styled(Button)`
   width: 100px;
 `;
 
+const ContentHeader = styled(Div)`
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+`;
+
+const ContentWrapper = styled(Div)`
+  // Take up full height, minus the content header
+  height: calc(100vh - 74px);
+  overflow-y: auto;
+  padding: 2rem;
+`;
+
+const Element = ({ attributes, children, element }) => {
+  switch (element.type) {
+    case "block-quote":
+      return <blockquote {...attributes}>{children}</blockquote>;
+    case "bulleted-list":
+      return <ul {...attributes}>{children}</ul>;
+    case "heading-one":
+      return <h1 {...attributes}>{children}</h1>;
+    case "heading-two":
+      return <h2 {...attributes}>{children}</h2>;
+    case "heading-three":
+      return <h3 {...attributes}>{children}</h3>;
+    case "heading-four":
+      return <h4 {...attributes}>{children}</h4>;
+    case "heading-five":
+      return <h5 {...attributes}>{children}</h5>;
+    case "heading-six":
+      return <h6 {...attributes}>{children}</h6>;
+    case "list-item":
+      return <li {...attributes}>{children}</li>;
+    default:
+      return <p {...attributes}>{children}</p>;
+  }
+};
+
 function Editor({ content, title }) {
-  const editor = useMemo(() => withReact(createEditor()), []);
+  const editor = useMemo(
+    () => withMarkdownShortcuts(withReact(withHistory(createEditor()))),
+    []
+  );
+  const renderElement = useCallback(props => <Element {...props} />, []);
   const [bodyValue, setBodyValue] = useState(
     content ? JSON.parse(content) : []
   );
@@ -35,7 +78,7 @@ function Editor({ content, title }) {
 
   return (
     <>
-      <Div mb4>
+      <ContentHeader>
         <TitleInput
           value={titleValue}
           onChange={e => {
@@ -47,17 +90,22 @@ function Editor({ content, title }) {
           Save
         </SaveButton>
         <NoteMenu />
-      </Div>
-      <Slate
-        editor={editor}
-        value={bodyValue}
-        onChange={newValue => {
-          setHasChanges(true);
-          setBodyValue(newValue);
-        }}
-      >
-        <Editable />
-      </Slate>
+      </ContentHeader>
+      <ContentWrapper>
+        <Slate
+          editor={editor}
+          value={bodyValue}
+          onChange={newValue => {
+            setHasChanges(true);
+            setBodyValue(newValue);
+          }}
+        >
+          <Editable
+            renderElement={renderElement}
+            placeholder="Take some notes!"
+          />
+        </Slate>
+      </ContentWrapper>
     </>
   );
 }
