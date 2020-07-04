@@ -71,7 +71,7 @@ const ContentWrapper = styled(Div)`
   // Take up full height, minus the content header
   height: calc(100vh - 74px - 37px);
   overflow-y: auto;
-  padding: 2rem;
+  padding: 2rem 1rem;
 `;
 
 const RichTextToolbar = styled(Div)`
