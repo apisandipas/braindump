@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Button, Div } from "@apisandipas/bssckit";
+import { Div, H3 } from "@apisandipas/bssckit";
 import { NoteIcon, NotebookIcon, TagsIcon } from "components/Icons";
 import SidebarAccountMenu from "components/SidebarAccountMenu";
 import NewNoteCTA from "components/NewNoteCTA";
@@ -48,6 +48,12 @@ function Sidebar({
   return (
     <SidebarWrapper expanded={isSidebarExpanded}>
       <SidebarContent>
+        <H3 textCenter mt2>
+          <span role="img" aria-labelledby="logo">
+            🧠
+          </span>
+          <Div id="logo">Braindump</Div>
+        </H3>
         <SidebarAccountMenu />
         <NewNoteCTA />
         <Div>

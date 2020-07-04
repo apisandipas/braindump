@@ -15,6 +15,11 @@ const NOTE_QUERY = gql`
       id
       title
       body
+      updatedAt
+      notebook {
+        name
+        id
+      }
     }
   }
 `;
@@ -36,8 +41,13 @@ function NoteDetails({ isNotebookIndex, noteId }) {
   }
 
   return (
-    <NoteDetailsWrapper>
-      <Editor title={note.title} content={note.body} key={note.id} />
+    <NoteDetailsWrapper p4>
+      <Editor
+        note={note}
+        title={note.title}
+        content={note.body}
+        key={note.id}
+      />
     </NoteDetailsWrapper>
   );
 }

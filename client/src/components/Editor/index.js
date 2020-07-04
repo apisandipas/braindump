@@ -1,11 +1,35 @@
-import React, { useEffect, useCallback, useState, useMemo } from "react";
-import { createEditor } from "slate";
+import React, { useCallback, useState, useMemo } from "react";
+import isHotkey from "is-hotkey";
+import { Editor, createEditor, Transforms } from "slate";
 import { withHistory } from "slate-history";
-import { Slate, Editable, withReact } from "slate-react";
-import { FormControl, Div, Button } from "@apisandipas/bssckit";
+import { Slate, Editable, withReact, useSlate } from "slate-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBold,
+  faItalic,
+  faUnderline,
+  faCode,
+  faQuoteRight,
+  faListUl,
+  faListOl
+} from "@fortawesome/free-solid-svg-icons";
+import friendlyTime from "friendly-time";
+import {
+  FormControl,
+  Div,
+  Span,
+  Button,
+  ButtonGroup,
+  ButtonToolbar
+} from "@apisandipas/bssckit";
 import styled from "styled-components";
 import NoteMenu from "components/NoteMenu";
+import { NotebookIcon } from "components/Icons";
 import { withMarkdownShortcuts } from "utils/markdown";
+
+const Icon = ({ icon }) => {
+  return <FontAwesomeIcon icon={icon} />;
+};
 
 const TitleInput = styled(FormControl).attrs({
   plainText: true,
@@ -29,15 +53,39 @@ const SaveButton = styled(Button)`
 const ContentHeader = styled(Div)`
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
+`;
+
+const ContentMeta = styled(Div)`
+  display: flex;
+  padding: 1rem 1rem 0;
+`;
+
+const LastEdit = styled(Span)``;
+
+const NotebookName = styled(Div)`
+  margin-left: auto;
 `;
 
 const ContentWrapper = styled(Div)`
   // Take up full height, minus the content header
-  height: calc(100vh - 74px);
+  height: calc(100vh - 74px - 37px);
   overflow-y: auto;
   padding: 2rem;
 `;
+
+const RichTextToolbar = styled(Div)`
+  padding: 1rem 1rem 0;
+`;
+
+const HOTKEYS = {
+  "mod+b": "bold",
+  "mod+i": "italic",
+  "mod+u": "underline",
+  "mod+`": "code"
+};
+
+const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 const Element = ({ attributes, children, element }) => {
   switch (element.type) {
@@ -59,20 +107,84 @@ const Element = ({ attributes, children, element }) => {
       return <h6 {...attributes}>{children}</h6>;
     case "list-item":
       return <li {...attributes}>{children}</li>;
+    case "numbered-list":
+      return <ol {...attributes}>{children}</ol>;
     default:
       return <p {...attributes}>{children}</p>;
   }
 };
 
-function Editor({ content, title }) {
+const Leaf = ({ attributes, children, leaf }) => {
+  if (leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
+
+  if (leaf.code) {
+    children = <code>{children}</code>;
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
+
+  return <span {...attributes}>{children}</span>;
+};
+
+const toggleBlock = (editor, format) => {
+  const isActive = isBlockActive(editor, format);
+  const isList = LIST_TYPES.includes(format);
+
+  Transforms.unwrapNodes(editor, {
+    match: n => LIST_TYPES.includes(n.type),
+    split: true
+  });
+
+  Transforms.setNodes(editor, {
+    type: isActive ? "paragraph" : isList ? "list-item" : format
+  });
+
+  if (!isActive && isList) {
+    const block = { type: format, children: [] };
+    Transforms.wrapNodes(editor, block);
+  }
+};
+
+const toggleMark = (editor, format) => {
+  const isActive = isMarkActive(editor, format);
+
+  if (isActive) {
+    Editor.removeMark(editor, format);
+  } else {
+    Editor.addMark(editor, format, true);
+  }
+};
+
+const isBlockActive = (editor, format) => {
+  const [match] = Editor.nodes(editor, {
+    match: n => n.type === format
+  });
+
+  return !!match;
+};
+
+const isMarkActive = (editor, format) => {
+  const marks = Editor.marks(editor);
+  return marks ? marks[format] === true : false;
+};
+
+function RichTextEditor({ note }) {
+  const { title, body, updatedAt, notebook } = note;
   const editor = useMemo(
     () => withMarkdownShortcuts(withReact(withHistory(createEditor()))),
     []
   );
   const renderElement = useCallback(props => <Element {...props} />, []);
-  const [bodyValue, setBodyValue] = useState(
-    content ? JSON.parse(content) : []
-  );
+  const renderLeaf = useCallback(props => <Leaf {...props} />, []);
+  const [bodyValue, setBodyValue] = useState(body ? JSON.parse(body) : []);
   const [titleValue, setTitleValue] = useState(title || "Untitled");
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -91,23 +203,90 @@ function Editor({ content, title }) {
         </SaveButton>
         <NoteMenu />
       </ContentHeader>
-      <ContentWrapper>
-        <Slate
-          editor={editor}
-          value={bodyValue}
-          onChange={newValue => {
-            setHasChanges(true);
-            setBodyValue(newValue);
-          }}
-        >
+      <ContentMeta>
+        <LastEdit>Last edited: {friendlyTime(new Date(+updatedAt))}</LastEdit>
+        {notebook && (
+          <NotebookName>
+            {" "}
+            <NotebookIcon />
+            {notebook.name}
+          </NotebookName>
+        )}
+      </ContentMeta>
+      <Slate
+        editor={editor}
+        value={bodyValue}
+        onChange={newValue => {
+          setHasChanges(true);
+          setBodyValue(newValue);
+        }}
+      >
+        <RichTextToolbar>
+          <ButtonToolbar>
+            <ButtonGroup mr2>
+              <MarkButton format="bold" icon={faBold} dark />
+              <MarkButton format="italic" icon={faItalic} dark />
+              <MarkButton format="underline" icon={faUnderline} dark />
+              <MarkButton format="code" icon={faCode} dark />
+            </ButtonGroup>
+            <ButtonGroup>
+              <BlockButton format="block-quote" icon={faQuoteRight} dark />
+              <BlockButton format="numbered-list" icon={faListOl} dark />
+              <BlockButton format="bulleted-list" icon={faListUl} dark />
+            </ButtonGroup>
+          </ButtonToolbar>
+        </RichTextToolbar>
+        <ContentWrapper>
           <Editable
             renderElement={renderElement}
+            renderLeaf={renderLeaf}
             placeholder="Take some notes!"
+            onKeyDown={event => {
+              for (const hotkey in HOTKEYS) {
+                if (isHotkey(hotkey, event)) {
+                  event.preventDefault();
+                  const mark = HOTKEYS[hotkey];
+                  toggleMark(editor, mark);
+                }
+              }
+            }}
           />
-        </Slate>
-      </ContentWrapper>
+        </ContentWrapper>
+      </Slate>
     </>
   );
 }
 
-export default Editor;
+const BlockButton = ({ format, icon, ...props }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      {...props}
+      active={isBlockActive(editor, format)}
+      onMouseDown={event => {
+        event.preventDefault();
+        toggleBlock(editor, format);
+      }}
+    >
+      <Icon icon={icon} />
+    </Button>
+  );
+};
+
+const MarkButton = ({ format, icon, ...props }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      {...props}
+      active={isMarkActive(editor, format)}
+      onMouseDown={event => {
+        event.preventDefault();
+        toggleMark(editor, format);
+      }}
+    >
+      <Icon icon={icon} />
+    </Button>
+  );
+};
+
+export default RichTextEditor;

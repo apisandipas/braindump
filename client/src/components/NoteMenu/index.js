@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Span,
-  Button,
   Dropdown,
   DropdownMenu,
-  DropdownItem,
-  DropdownDivider
+  DropdownItem
 } from "@apisandipas/bssckit";
 import styled from "styled-components";
 import { KebobIcon } from "components/Icons";

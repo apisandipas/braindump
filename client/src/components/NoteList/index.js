@@ -53,12 +53,14 @@ function NoteList({ isNotebookIndex, notebookId, noteId }) {
     if (isNotebookIndex) {
       return;
     }
-    if ((!notebookId || notebookId === "all") && allNotes?.length) {
-      console.log("redirecting....");
+    if (noteId) {
+      return;
+    }
+    if (notebookId && notebookId === "all" && allNotes?.length) {
       const firstNote = allNotes[0];
       history.push(`/notebook/all/note/${firstNote.id}`);
     }
-  }, [allNotesData, allNotes, history, isNotebookIndex, notebookId]);
+  }, [allNotesData, allNotes, history, isNotebookIndex, notebookId, noteId]);
 
   const { data: selectedNotebookData } = useQuery(
     SELECTED_NOTEBOOKED_NOTES_QUERY,

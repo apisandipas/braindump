@@ -4,6 +4,23 @@ import { SuccessResponse } from "utils/responses";
 
 export default {
   Note: {
+    notebook: async (parent, args, { models, req }) => {
+      if (!req.user) {
+        throw new UnauthorizedError("Unauthorized!");
+      }
+      try {
+        const { notebookId } = parent;
+        const notebook = await models.Notebook.where({
+          id: notebookId
+        }).fetch();
+
+        if (notebook) {
+          return notebook.toJSON();
+        }
+      } catch (err) {
+        throw new ApolloError(err.message);
+      }
+    },
     tags: async (parent, args, { models, req }) => {
       if (!req.user) {
         throw new UnauthorizedError("Unauthorized!");

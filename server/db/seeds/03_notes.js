@@ -33,7 +33,7 @@ exports.seed = async knex => {
   notes.push({
     user_id: faker.random.arrayElement(user_ids),
     notebook_id: faker.random.arrayElement(notebook_ids),
-    title: faker.lorem.words(),
+    title: "Markdown example",
     body: JSON.stringify([
       {
         type: "block-quote",

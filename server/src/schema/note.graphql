@@ -6,6 +6,7 @@ type Note {
   tags: [Tag!]
   user: User
   notebookId: ID!
+  notebook: Notebook
 }
 
 type NoteMutationResponse {
