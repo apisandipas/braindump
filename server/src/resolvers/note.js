@@ -104,7 +104,23 @@ export default {
         throw new UnauthorizedError("Unauthorized");
       }
       try {
-        const note = await models.Note.create({ ...values, user_id: req.user });
+        let notebookId;
+        if (values.notebookId === "all") {
+          const user = await models.User.where({ id: req.user }).fetch();
+          const notebook = await models.Notebook.where({
+            name: user.get("email") + "'s Notebook",
+            user_id: req.user
+          }).fetch();
+          notebookId = notebook.get("id");
+        } else {
+          notebookId = values.notebookId;
+        }
+        delete values.notebookId;
+        const note = await models.Note.create({
+          ...values,
+          user_id: req.user,
+          notebook_id: notebookId
+        });
         if (note) {
           return new SuccessResponse({
             note: note.toJSON()

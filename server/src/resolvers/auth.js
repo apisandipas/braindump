@@ -21,7 +21,14 @@ export default {
           throw new UserInputError("Please pick a unique email.");
         }
         const user = await models.User.create(args);
+
         if (user) {
+          // Create default notebook upon registration
+          await models.Notebook.create({
+            name: args.email + "'s Notebook",
+            user_id: user.get("id")
+          });
+
           return new SuccessResponse(createTokens(user));
         }
       } catch (err) {

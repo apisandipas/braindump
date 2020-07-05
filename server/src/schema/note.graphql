@@ -1,7 +1,7 @@
 type Note {
   id: ID!
   title: String!
-  body: String!
+  body: String
   updatedAt: String
   tags: [Tag!]
   user: User
@@ -12,7 +12,7 @@ type Note {
 type NoteMutationResponse {
   ok: Boolean!
   code: Int
-  messge: String
+  message: String
   note: Note
 }
 
@@ -39,4 +39,5 @@ type Mutation {
 input NoteInput {
   title: String
   body: String
+  notebookId: ID
 }

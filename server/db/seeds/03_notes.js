@@ -6,8 +6,11 @@ exports.seed = async knex => {
   // Deletes ALL existing entries
   await knex("notes").del();
 
-  // fetch existing ids.
-  const user_ids = await knex.table("users").pluck("id");
+  const admin_user = await knex
+    .table("users")
+    .where("email", "bparonto@gmail.com")
+    .select("id");
+
   const notebook_ids = await knex.table("notebooks").pluck("id");
 
   // Create 100 Notes
@@ -20,7 +23,7 @@ exports.seed = async knex => {
     ];
 
     return {
-      user_id: faker.random.arrayElement(user_ids),
+      user_id: admin_user[0].id,
       notebook_id: faker.random.arrayElement(notebook_ids),
       title: faker.lorem.words(),
       body: JSON.stringify(richTextContent),
@@ -31,7 +34,7 @@ exports.seed = async knex => {
 
   // Add a note with Markdown content
   notes.push({
-    user_id: faker.random.arrayElement(user_ids),
+    user_id: admin_user[0].id,
     notebook_id: faker.random.arrayElement(notebook_ids),
     title: "Markdown example",
     body: JSON.stringify([

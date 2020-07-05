@@ -7,14 +7,17 @@ exports.seed = async knex => {
   await knex("tags").del();
   await knex("notes_tags").del();
 
-  const user_ids = await knex.table("users").pluck("id");
+  const admin_user = await knex
+    .table("users")
+    .where("email", "bparonto@gmail.com")
+    .select("id");
 
   // Create 10 Tag
   const tags = map(range(1, 9, 1), i => {
     return {
       name: i + " " + faker.lorem.word(),
       created_at: faker.date.recent(),
-      user_id: faker.random.arrayElement(user_ids),
+      user_id: admin_user[0].id,
       updated_at: faker.date.recent()
     };
   });

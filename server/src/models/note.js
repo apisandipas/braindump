@@ -1,27 +1,26 @@
-import db, { ModelBase } from 'database'
-import User from './user'
-import Notebook from './notebook'
-import Tag from './tag'
-import Joi from '@hapi/joi'
+import db, { ModelBase } from "database";
+import User from "./user";
+import Notebook from "./notebook";
+import Tag from "./tag";
+import Joi from "@hapi/joi";
 
 const Note = ModelBase.extend({
-  tableName: 'notes',
+  tableName: "notes",
   user() {
-    return this.belongsTo(User)
+    return this.belongsTo(User);
   },
   notebook() {
-    return this.belongsTo(Notebook)
+    return this.belongsTo(Notebook);
   },
   tags() {
-    return this.belongsToMany(Tag)
+    return this.belongsToMany(Tag);
   },
   validate: {
-    title: Joi.string()
-      .min(3)
-      .max(30)
-      .required(),
-    body: Joi.string().required()
+    title: Joi.string().min(3).max(30).required(),
+    body: Joi.string().allow(null),
+    user_id: Joi.number(),
+    notebook_id: Joi.number()
   }
-})
+});
 
-export default db.model('Note', Note)
+export default db.model("Note", Note);
