@@ -116,7 +116,7 @@ export default {
     },
     updateNote: async (parent, { id, values }, { models, req }) => {
       if (!req.user) {
-        throw new UnauthorizedError("Unauthorized!");
+        throw new ApolloError("Unauthorized!");
       }
       try {
         const note = await models.Note.update(values, {

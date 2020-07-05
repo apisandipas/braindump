@@ -1,9 +1,8 @@
 import React, { useCallback, useState, useMemo } from "react";
-import isHotkey from "is-hotkey";
-import { Editor, createEditor, Transforms } from "slate";
+import { createEditor } from "slate";
+import gql from "graphql-tag";
 import { withHistory } from "slate-history";
-import { Slate, Editable, withReact, useSlate } from "slate-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Slate, Editable, withReact } from "slate-react";
 import {
   faBold,
   faItalic,
@@ -14,6 +13,7 @@ import {
   faListOl
 } from "@fortawesome/free-solid-svg-icons";
 import friendlyTime from "friendly-time";
+import { useMutation } from "@apollo/react-hooks";
 import {
   FormControl,
   Div,
@@ -26,10 +26,7 @@ import styled from "styled-components";
 import NoteMenu from "components/NoteMenu";
 import { NotebookIcon } from "components/Icons";
 import { withMarkdownShortcuts } from "utils/markdown";
-
-const Icon = ({ icon }) => {
-  return <FontAwesomeIcon icon={icon} />;
-};
+import { MarkButton, BlockButton } from "utils/richText";
 
 const TitleInput = styled(FormControl).attrs({
   plainText: true,
@@ -78,15 +75,6 @@ const RichTextToolbar = styled(Div)`
   padding: 1rem 1rem 0;
 `;
 
-const HOTKEYS = {
-  "mod+b": "bold",
-  "mod+i": "italic",
-  "mod+u": "underline",
-  "mod+`": "code"
-};
-
-const LIST_TYPES = ["numbered-list", "bulleted-list"];
-
 const Element = ({ attributes, children, element }) => {
   switch (element.type) {
     case "block-quote":
@@ -134,50 +122,22 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const toggleBlock = (editor, format) => {
-  const isActive = isBlockActive(editor, format);
-  const isList = LIST_TYPES.includes(format);
-
-  Transforms.unwrapNodes(editor, {
-    match: n => LIST_TYPES.includes(n.type),
-    split: true
-  });
-
-  Transforms.setNodes(editor, {
-    type: isActive ? "paragraph" : isList ? "list-item" : format
-  });
-
-  if (!isActive && isList) {
-    const block = { type: format, children: [] };
-    Transforms.wrapNodes(editor, block);
+const SAVE_CHANGES_MUTATION = gql`
+  mutation saveChanges($id: ID!, $title: String!, $body: String!) {
+    updateNote(id: $id, values: { title: $title, body: $body }) {
+      ok
+      note {
+        id
+        title
+        body
+      }
+    }
   }
-};
-
-const toggleMark = (editor, format) => {
-  const isActive = isMarkActive(editor, format);
-
-  if (isActive) {
-    Editor.removeMark(editor, format);
-  } else {
-    Editor.addMark(editor, format, true);
-  }
-};
-
-const isBlockActive = (editor, format) => {
-  const [match] = Editor.nodes(editor, {
-    match: n => n.type === format
-  });
-
-  return !!match;
-};
-
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
-};
+`;
 
 function RichTextEditor({ note }) {
-  const { title, body, updatedAt, notebook } = note;
+  const { id, title, body, updatedAt, notebook } = note;
+  const [saveChanges] = useMutation(SAVE_CHANGES_MUTATION);
   const editor = useMemo(
     () => withMarkdownShortcuts(withReact(withHistory(createEditor()))),
     []
@@ -187,6 +147,21 @@ function RichTextEditor({ note }) {
   const [bodyValue, setBodyValue] = useState(body ? JSON.parse(body) : []);
   const [titleValue, setTitleValue] = useState(title || "Untitled");
   const [hasChanges, setHasChanges] = useState(false);
+
+  async function persistChanges() {
+    try {
+      await saveChanges({
+        variables: {
+          id,
+          title: titleValue,
+          body: JSON.stringify(bodyValue)
+        }
+      });
+      setHasChanges(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <>
@@ -198,7 +173,7 @@ function RichTextEditor({ note }) {
             setTitleValue(e.target.value);
           }}
         />
-        <SaveButton success ml4 disabled={!hasChanges}>
+        <SaveButton success ml4 disabled={!hasChanges} onClick={persistChanges}>
           Save
         </SaveButton>
         <NoteMenu />
@@ -207,7 +182,6 @@ function RichTextEditor({ note }) {
         <LastEdit>Last edited: {friendlyTime(new Date(+updatedAt))}</LastEdit>
         {notebook && (
           <NotebookName>
-            {" "}
             <NotebookIcon />
             {notebook.name}
           </NotebookName>
@@ -241,52 +215,11 @@ function RichTextEditor({ note }) {
             renderElement={renderElement}
             renderLeaf={renderLeaf}
             placeholder="Take some notes!"
-            onKeyDown={event => {
-              for (const hotkey in HOTKEYS) {
-                if (isHotkey(hotkey, event)) {
-                  event.preventDefault();
-                  const mark = HOTKEYS[hotkey];
-                  toggleMark(editor, mark);
-                }
-              }
-            }}
           />
         </ContentWrapper>
       </Slate>
     </>
   );
 }
-
-const BlockButton = ({ format, icon, ...props }) => {
-  const editor = useSlate();
-  return (
-    <Button
-      {...props}
-      active={isBlockActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault();
-        toggleBlock(editor, format);
-      }}
-    >
-      <Icon icon={icon} />
-    </Button>
-  );
-};
-
-const MarkButton = ({ format, icon, ...props }) => {
-  const editor = useSlate();
-  return (
-    <Button
-      {...props}
-      active={isMarkActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault();
-        toggleMark(editor, format);
-      }}
-    >
-      <Icon icon={icon} />
-    </Button>
-  );
-};
 
 export default RichTextEditor;

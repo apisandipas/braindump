@@ -20,7 +20,6 @@
     "friendly-time": "^1.1.1",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
-    "is-hotkey": "^0.1.6",
     "jwt-decode": "^2.2.0",
     "lodash.get": "^4.4.2",
     "prop-types": "^15.7.2",
