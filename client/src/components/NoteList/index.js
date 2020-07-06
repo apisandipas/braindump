@@ -9,7 +9,7 @@ import { ALL_NOTES_QUERY, SELECTED_NOTEBOOK_NOTES_QUERY } from "utils/queries";
 
 const NoteListWrapper = styled(Div)`
   width: 266px;
-  background: var(--nord4);
+  background: var(--nord5);
 `;
 
 function NoteList({ isNotebookIndex, notebookId, noteId }) {

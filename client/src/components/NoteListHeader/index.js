@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const HeaderWrapper = styled(Div)`
   color: var(--body-color);
-  background: var(--nord4);
+  background: var(--nord5);
   border-bottom: 1px solid #ccc;
   border-right: 1px solid #ccc;
   h5 {

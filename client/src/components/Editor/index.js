@@ -185,15 +185,15 @@ function RichTextEditor({ note }) {
         <RichTextToolbar>
           <ButtonToolbar>
             <ButtonGroup mr2>
-              <MarkButton format="bold" icon={faBold} dark />
-              <MarkButton format="italic" icon={faItalic} dark />
-              <MarkButton format="underline" icon={faUnderline} dark />
-              <MarkButton format="code" icon={faCode} dark />
+              <MarkButton format="bold" icon={faBold} light />
+              <MarkButton format="italic" icon={faItalic} light />
+              <MarkButton format="underline" icon={faUnderline} light />
+              <MarkButton format="code" icon={faCode} light />
             </ButtonGroup>
             <ButtonGroup>
-              <BlockButton format="block-quote" icon={faQuoteRight} dark />
-              <BlockButton format="numbered-list" icon={faListOl} dark />
-              <BlockButton format="bulleted-list" icon={faListUl} dark />
+              <BlockButton format="block-quote" icon={faQuoteRight} light />
+              <BlockButton format="numbered-list" icon={faListOl} light />
+              <BlockButton format="bulleted-list" icon={faListUl} light />
             </ButtonGroup>
           </ButtonToolbar>
         </RichTextToolbar>

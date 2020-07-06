@@ -27,8 +27,7 @@ const NoteItem = styled(Li)`
   }
   border-bottom: 1px solid #ccc;
   border-right: 1px solid ${props => (props.selected ? "transparent" : "#ccc;")};
-  background: ${props =>
-    props.selected ? "var(--body-background)" : "transparent"};
+  background: ${props => (props.selected ? "#fff" : "transparent")};
 `;
 
 const UpdatedAt = styled(Div)`

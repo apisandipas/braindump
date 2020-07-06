@@ -7,6 +7,7 @@ import { NOTE_QUERY } from "utils/queries";
 
 const NoteDetailsWrapper = styled(Div)`
   width: calc(100% - 266px);
+  background: #fff;
 `;
 
 function NoteDetails({ isNotebookIndex, noteId }) {
