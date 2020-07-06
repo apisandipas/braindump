@@ -16,14 +16,7 @@ import {
   FormControl
 } from "@apisandipas/bssckit";
 import { AuthFormWrapper } from "components/AuthForm";
-
-const RESET_PASSWORD_MUTATION = gql`
-  mutation resetPassword($token: String!, $password: String!) {
-    resetPassword(token: $token, password: $password) {
-      ok
-    }
-  }
-`;
+import { RESET_PASSWORD_MUTATION } from "utils/queries";
 
 function ResetPassword() {
   const location = useLocation();

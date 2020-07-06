@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { useParams, useHistory } from "react-router-dom";
 import { NewIcon } from "components/Icons";
+import {
+  NEW_NOTE_MUTATION,
+  ALL_NOTES_QUERY,
+  SELECTED_NOTEBOOK_NOTES_QUERY
+} from "utils/queries";
 
 const NewNoteIcon = styled(NewIcon)`
   color: var(--nord14);
@@ -20,50 +24,6 @@ const CTAWrapper = styled.div`
   }
 `;
 
-const NEW_NOTE_MUTATION = gql`
-  mutation newNote($title: String!, $body: String, $notebookId: ID) {
-    createNote(
-      values: { title: $title, body: $body, notebookId: $notebookId }
-    ) {
-      ok
-      note {
-        id
-        title
-        body
-      }
-    }
-  }
-`;
-
-const ALL_NOTES_QUERY = gql`
-  query allNotes {
-    allNotes {
-      title
-      body
-      id
-      updatedAt
-    }
-  }
-`;
-
-const SELECTED_NOTEBOOKED_NOTES_QUERY = gql`
-  query notesByNotebookId($notebookId: ID!) {
-    notesByNotebook(notebookId: $notebookId) {
-      ok
-      notes {
-        id
-        title
-        body
-        updatedAt
-      }
-      notebook {
-        id
-        name
-      }
-    }
-  }
-`;
-
 function NewNoteCTA() {
   const [createNote] = useMutation(NEW_NOTE_MUTATION);
   const { notebookId } = useParams();
@@ -72,7 +32,7 @@ function NewNoteCTA() {
   const refetchQueries =
     notebookId === "all"
       ? [{ query: ALL_NOTES_QUERY }]
-      : [{ query: SELECTED_NOTEBOOKED_NOTES_QUERY, variables: { notebookId } }];
+      : [{ query: SELECTED_NOTEBOOK_NOTES_QUERY, variables: { notebookId } }];
 
   async function createNewNote() {
     try {
@@ -82,7 +42,7 @@ function NewNoteCTA() {
           body: JSON.stringify([
             {
               type: "paragraph",
-              children: [{ text: "Get started..." }]
+              children: [{ text: "" }]
             }
           ]),
           notebookId

@@ -17,16 +17,7 @@ import {
 import { setTokens, AuthContext } from "utils/auth";
 import { isValidEmail } from "utils/validation";
 import { AuthFormWrapper } from "components/AuthForm";
-
-const LOGIN_MUTATION = gql`
-  mutation loginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      ok
-      token
-      refreshToken
-    }
-  }
-`;
+import { LOGIN_MUTATION } from "utils/queries";
 
 function Login() {
   const history = useHistory();

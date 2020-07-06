@@ -3,41 +3,13 @@ import { useQuery } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
 import { Div } from "@apisandipas/bssckit";
 import styled from "styled-components";
-import gql from "graphql-tag";
 import NoteListHeader from "components/NoteListHeader";
 import NoteListItems from "components/NoteListItems";
+import { ALL_NOTES_QUERY, SELECTED_NOTEBOOK_NOTES_QUERY } from "utils/queries";
 
 const NoteListWrapper = styled(Div)`
   width: 266px;
   background: var(--nord4);
-`;
-
-const ALL_NOTES_QUERY = gql`
-  query allNotes {
-    allNotes {
-      title
-      body
-      id
-      updatedAt
-    }
-  }
-`;
-
-const SELECTED_NOTEBOOKED_NOTES_QUERY = gql`
-  query notesByNotebookId($notebookId: ID!) {
-    notesByNotebook(notebookId: $notebookId) {
-      ok
-      notes {
-        id
-        title
-        body
-      }
-      notebook {
-        id
-        name
-      }
-    }
-  }
 `;
 
 function NoteList({ isNotebookIndex, notebookId, noteId }) {
@@ -63,7 +35,7 @@ function NoteList({ isNotebookIndex, notebookId, noteId }) {
   }, [allNotesData, allNotes, history, isNotebookIndex, notebookId, noteId]);
 
   const { data: selectedNotebookData } = useQuery(
-    SELECTED_NOTEBOOKED_NOTES_QUERY,
+    SELECTED_NOTEBOOK_NOTES_QUERY,
     {
       skip: !notebookId || notebookId === "all",
       variables: { notebookId }

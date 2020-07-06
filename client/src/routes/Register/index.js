@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import {
   Alert,
   H1,
@@ -17,16 +16,7 @@ import {
 import { setTokens, AuthContext } from "utils/auth";
 import { isValidEmail } from "utils/validation";
 import { AuthFormWrapper } from "components/AuthForm";
-
-const REGISTER_MUTATION = gql`
-  mutation register($email: String!, $password: String!) {
-    register(email: $email, password: $password) {
-      ok
-      token
-      refreshToken
-    }
-  }
-`;
+import { REGISTER_MUTATION } from "utils/queries";
 
 function Register() {
   const history = useHistory();

@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import gql from "graphql-tag";
 import { useParams, useRouteMatch } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import useToggle from "utils/hooks/useToggle";
 import NoteDetails from "components/NoteDetails";
 import NoteList from "components/NoteList";
+
 import Sidebar from "components/Sidebar";
+import { TAGS_AND_NOTEBOOKS_QUERY } from "utils/queries";
 
 const Main = styled.main`
   display: flex;
@@ -24,19 +25,6 @@ const AppWrapper = styled.div`
 `;
 
 const SIDEBAR_EXPANDED_OPTION = "noteapp-sidebar-expanded";
-
-const TAGS_AND_NOTEBOOKS_QUERY = gql`
-  query getNotebooksAndTags {
-    allNotebooks {
-      id
-      name
-    }
-    allTags {
-      id
-      name
-    }
-  }
-`;
 
 function Home() {
   const [isSidebarExpanded, toggleSidebarExpanded] = useToggle(

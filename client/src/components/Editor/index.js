@@ -27,6 +27,7 @@ import NoteMenu from "components/NoteMenu";
 import { NotebookIcon } from "components/Icons";
 import { withMarkdownShortcuts } from "utils/markdown";
 import { MarkButton, BlockButton } from "utils/richText";
+import { SAVE_CHANGES_MUTATION } from "utils/queries";
 
 const TitleInput = styled(FormControl).attrs({
   plainText: true,
@@ -121,19 +122,6 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   return <span {...attributes}>{children}</span>;
 };
-
-const SAVE_CHANGES_MUTATION = gql`
-  mutation saveChanges($id: ID!, $title: String!, $body: String!) {
-    updateNote(id: $id, values: { title: $title, body: $body }) {
-      ok
-      note {
-        id
-        title
-        body
-      }
-    }
-  }
-`;
 
 function RichTextEditor({ note }) {
   const { id, title, body, updatedAt, notebook } = note;

@@ -1,13 +1,7 @@
 import { useContext } from "react";
 import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { AuthContext } from "utils/auth";
-
-const INVALIDATE_TOKENS_MUTATION = gql`
-  mutation logout {
-    invalidateTokens
-  }
-`;
+import { INVALIDATE_TOKENS_MUTATION } from "utils/queries";
 
 function useLogout() {
   const [invalidateTokens, { client }] = useMutation(

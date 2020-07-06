@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import {
   Alert,
   H1,
@@ -16,14 +15,7 @@ import {
 } from "@apisandipas/bssckit";
 import { isValidEmail } from "utils/validation";
 import { AuthFormWrapper } from "components/AuthForm";
-
-const FORGOT_PASSWORD_MUTATION = gql`
-  mutation forgotPassword($email: String!) {
-    forgotPassword(email: $email) {
-      ok
-    }
-  }
-`;
+import { FORGOT_PASSWORD_MUTATION } from "utils/queries";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
