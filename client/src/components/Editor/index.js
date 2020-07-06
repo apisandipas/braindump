@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useMemo } from "react";
 import { createEditor } from "slate";
-import gql from "graphql-tag";
 import { withHistory } from "slate-history";
 import { Slate, Editable, withReact } from "slate-react";
 import {

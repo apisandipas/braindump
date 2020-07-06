@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, Redirect, useHistory, useLocation } from "react-router-dom";
 import { useMutation } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import {
   Alert,
   H1,
