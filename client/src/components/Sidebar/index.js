@@ -48,12 +48,6 @@ function Sidebar({
   return (
     <SidebarWrapper expanded={isSidebarExpanded}>
       <SidebarContent>
-        <H3 textCenter mt2>
-          <span role="img" aria-labelledby="logo">
-            🧠
-          </span>
-          <Div id="logo">Braindump</Div>
-        </H3>
         <SidebarAccountMenu />
         <NewNoteCTA />
         <Div>
